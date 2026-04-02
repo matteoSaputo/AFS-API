@@ -1,0 +1,20 @@
+GET http://127.0.0.1:8787/businesses
+###
+POST http://127.0.0.1:8787/businesses
+Content-Type: application/json
+
+{
+  "business_legal_name": "Second Test Corp",
+  "ein": "987654321",
+  "industry_id": 1,
+  "city": "New York",
+  "state": "NY"
+}
+###
+GET http://127.0.0.1:8787/businesses/1
+###
+GET http://127.0.0.1:8787/businesses?state=NY
+###
+GET http://127.0.0.1:8787/businesses?industry_id=1
+###
+GET http://127.0.0.1:8787/businesses?city=New York
