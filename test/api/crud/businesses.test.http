@@ -20,14 +20,6 @@ GET {{baseUrl}}/businesses?industry_id=1
 ###
 GET {{baseUrl}}/businesses?city=New York
 ###
-Get {{baseUrl}}/health
-###
-Get {{baseUrl}}/debug/ping
-###
-Get {{baseUrl}}/debug/bindings
-###
-Get {{baseUrl}}/debug/where
-###
 PATCH {{baseUrl}}/businesses/4
 Content-Type: application/json
 

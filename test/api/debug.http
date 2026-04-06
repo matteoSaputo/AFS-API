@@ -1,0 +1,5 @@
+Get {{baseUrl}}/debug/ping
+###
+Get {{baseUrl}}/debug/bindings
+###
+Get {{baseUrl}}/debug/where
