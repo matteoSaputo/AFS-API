@@ -1,20 +1,39 @@
-GET http://127.0.0.1:8787/businesses
 ###
-POST http://127.0.0.1:8787/businesses
+GET {{baseUrl}}/businesses
+###
+POST {{baseUrl}}/businesses
 Content-Type: application/json
 
 {
-  "business_legal_name": "Second Test Corp",
-  "ein": "987654321",
+  "business_legal_name": "4th Test Corp",
+  "ein": "456895623",
   "industry_id": 1,
-  "city": "New York",
-  "state": "NY"
+  "city": "Dallas",
+  "state": "TX"
 }
 ###
-GET http://127.0.0.1:8787/businesses/1
+GET {{baseUrl}}/businesses/4
 ###
-GET http://127.0.0.1:8787/businesses?state=NY
+GET {{baseUrl}}/businesses?state=NY
 ###
-GET http://127.0.0.1:8787/businesses?industry_id=1
+GET {{baseUrl}}/businesses?industry_id=1
 ###
-GET http://127.0.0.1:8787/businesses?city=New York
+GET {{baseUrl}}/businesses?city=New York
+###
+Get {{baseUrl}}/health
+###
+Get {{baseUrl}}/debug/ping
+###
+Get {{baseUrl}}/debug/bindings
+###
+Get {{baseUrl}}/debug/where
+###
+PATCH {{baseUrl}}/businesses/4
+Content-Type: application/json
+
+{
+  "city": "Pheonix",
+  "state": "AZ"
+}
+###
+DELETE {{baseUrl}}/businesses/6
