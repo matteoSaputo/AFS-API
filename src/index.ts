@@ -1,80 +1,43 @@
-import { Client } from "pg";
-
-export interface Env {
-	HYPERDRIVE: Hyperdrive;
-}
-
-function makeClient(env: Env) {
-	const cs = env.HYPERDRIVE.connectionString;
-	const isHyperdrive = cs.includes(".hyperdrive.local");
-
-	return new Client({
-		connectionString: cs,
-		...(isHyperdrive ? {} : {
-			ssl: {
-				rejectUnauthorized: false
-			}
-		})
-	})
-}
+import { fail } from "node:assert";
+import { businessRouter } from "./routes/businesses";
+import { debugRouter } from "./routes/debug";
+import { healthRouter } from "./routes/health";
+import { industryRouter } from "./routes/industries";
 
 export default {
 	async fetch(request, env, ctx): Promise<Response> {
 		const url = new URL(request.url);
+		const pathname = url.pathname;
 
-		if(url.pathname === "/health") {
-			const hasHyperdrive = !!env.HYPERDRIVE;
+		if(pathname === "/"){
 			return Response.json({
-				ok : true,
-				hasHyperdrive
-			});
-		}
-
-		if(url.pathname === "/db/ping") {
-			const client = makeClient(env)
-
-			try {
-				await client.connect();
-				const result = await client.query(`select now() as now`);
-				return Response.json({
-					ok: true,
-					now: result.rows[0].now
-				})
-			} catch (err: any) {
-				return Response.json({
-					ok: false,
-					error: err?.message ?? String(err),
-					name: err?.name,
-					code: err?.code
-				},
-				{
-					status: 500
-				}
-				)
-			} finally {
-				await client.end().catch(() => {})
-			}
-		}
-
-		if(url.pathname === "/debug/bindings") {
-			return Response.json({
-				envKeys: Object.keys(env || {}),
-				hyperdrive: {
-					present: env?.HYPERDRIVE != null,
-					// conn: env?.HYPERDRIVE?.connectionString?.slice(0, 128) ?? null
-				}
-			});
-		}
-
-		if(url.pathname === "/debug/where") {
-			const cs = env.HYPERDRIVE.connectionString;
-			return Response.json({
-				hostKind: cs.includes("hyperdrive.local") ? "hyperdrive" : "direct"
+				ok: true,
+				service: "AFS API",
+				status: "running"
 			})
 		}
 
-		return new Response("Not Found", {
-			status: 404
-		});
+		// ======== Businesses ==========
+		if (pathname.startsWith("/businesses")) {
+			return businessRouter(request, env);
+		}
+
+		// ======== Industries ==========
+		if(pathname.startsWith("/industries")) {
+			return industryRouter(request, env)
+		}
+
+		// ======== DB Health ==========
+		if(pathname.startsWith("/health")) {
+			return healthRouter(request, env);
+		}
+
+		// ======== Debug ==========
+		if(pathname.startsWith("/debug")) {
+			return debugRouter(request, env);
+		}
+
+		// return fail(`Endpoint Not Found, URL: ${url}`);
+		return fail("Endpoint Not Found");
 	},
 } satisfies ExportedHandler<Env>;
