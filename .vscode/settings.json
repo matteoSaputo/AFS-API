@@ -8,7 +8,7 @@
 			"baseUrl": "http://127.0.0.1:8787"
 		},
 		"prod": {
-			"baseUrl": "https://afs-api-2.matteo-678.workers.dev/"
+			"baseUrl": "https://afs-api-2.matteo-678.workers.dev"
 		}
 	}
 }
