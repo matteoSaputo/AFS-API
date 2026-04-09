@@ -1,8 +1,8 @@
 import { makeClient } from "../db/client";
-import type { Env, IndustryBody } from "../utils/types";
+import type { Env, MerchantBody } from "../utils/types";
 import { ok, fail } from "../utils/response";
 
-export async function industryRouter(
+export async function merchantRouter(
     request: Request,
     env: Env
 ): Promise<Response> {
@@ -12,38 +12,38 @@ export async function industryRouter(
 
     // === CREATE/POST ===
     if(method === "POST"){
-        return createIndustry(request, env);
+        return createMerchant(request, env);
     }
 
     // === READ/GET ===
     if (method === "GET" ) {
-        if(/^\/industries\/\d+$/.test(pathname)){
-            return getIndustryById(request, env);
+        if(/^\/merchants\/\d+$/.test(pathname)){
+            return getMerchantById(request, env);
         }
 
-        return listIndustries(request, env);
+        return listMerchants(request, env);
     }
 
     // === UPDATE/PATCH ===
     if (method === "PATCH") {
-        if(/^\/industries\/\d+$/.test(pathname)){
-            return patchIndustryById(request, env)
+        if(/^\/merchants\/\d+$/.test(pathname)){
+            return patchMerchantById(request, env)
         }
     }
 
     // === DELETE ===
     if (method === "DELETE") {
-        if(/^\/industries\/\d+$/.test(pathname)){
-            return deleteIndustryById(request, env)
+        if(/^\/merchants\/\d+$/.test(pathname)){
+            return deleteMerchantById(request, env)
         }
     }
 
     return fail("Method or Endpoint Not Found", 404)
 }
 
-async function deleteIndustryById(
-    request: Request, 
-    env: Env,
+async function deleteMerchantById(
+    request: Request,
+    env: Env
 ): Promise<Response> {
     const url = new URL(request.url);
     const id = url.pathname.split("/")[2];
@@ -55,7 +55,7 @@ async function deleteIndustryById(
 
         const result = await client.query(
             `
-                delete from industries
+                delete from merchants
                 where id = $1
                 returning *
             `,
@@ -63,7 +63,7 @@ async function deleteIndustryById(
         )
 
         if(result.rowCount === 0){
-            return fail("Industry Not Found", 404);
+            return fail("Merchant Not Found", 404);
         }
 
         return ok(result.rows[0]);
@@ -74,28 +74,37 @@ async function deleteIndustryById(
     }
 }
 
-async function patchIndustryById(
+async function patchMerchantById(
     request: Request,
     env: Env
 ): Promise<Response> {
     const url = new URL(request.url)
     const id = url.pathname.split("/")[2];
 
-    let body: IndustryBody;
+    let body: MerchantBody;
     try {
-        body = await request.json<IndustryBody>();
+        body = await request.json<MerchantBody>();
     } catch {
         return fail("Invalid JSON body", 400);
     }
 
-    const allowedFields: (keyof IndustryBody)[] = [
-        "industry",
-        "airtable_id"
+    const allowedFields: (keyof MerchantBody)[] = [
+        "name",
+        "ssn",
+        "date_of_birth",
+        "address",
+        "city",
+        "state",
+        "zip",
+        "email",
+        "phone",
+        "credit_score",
+        "bad_history",
     ];
 
     const entries = Object.entries(body).filter(
         ([key, value]) => 
-            allowedFields.includes(key as keyof IndustryBody) &&
+            allowedFields.includes(key as keyof MerchantBody) &&
             value !== undefined
     );
 
@@ -115,7 +124,7 @@ async function patchIndustryById(
 
         const result = await client.query(
             `
-                update industries
+                update merchants
                 set ${setClauses.join(", ")}
                 where id = $${values.length + 1}
                 returning *
@@ -124,31 +133,31 @@ async function patchIndustryById(
         );
 
         if(result.rowCount === 0){
-            return fail("Industry Not Found", 404)
+            return fail("Merchant Not Found", 500)
         }
 
         return ok(result.rows[0])
     } catch (err: any) {
-        return fail(err?.message ?? String(err), 500);
+        return fail(err?.message ?? String(err), 404);
     } finally {
         await client.end().catch(() => {})
     }
 }
 
-async function createIndustry(
+async function createMerchant(
     request: Request,
-    env: Env,
+    env: Env
 ): Promise<Response> {
-    let body: IndustryBody
-
+    let body: MerchantBody
+    
     try {
-        body = await request.json<IndustryBody>();
+        body = await request.json<MerchantBody>();
     } catch  {
         return fail("Invalid JSON body", 400)
     }
 
-    if(!body.industry){
-        return fail("Industry is required", 400)
+    if(!body.name){
+        return fail("Merchant name is required", 400)
     }
 
     const client = makeClient(env);
@@ -158,16 +167,37 @@ async function createIndustry(
         
         const result = await client.query(
             `
-                insert into industries (
-                    industry,
-                    airtable_id
+                insert into merchants (
+                    name,
+                    ssn,
+                    date_of_birth,
+                    address,
+                    city,
+                    state,
+                    zip,
+                    email,
+                    phone,
+                    credit_score,
+                    bad_history
                 )
-                values ($1, $2)
+                values (
+                    $1, $2, $3, $4, $5, $6,
+                    $7, $8, $9, $10, $11
+                )
                 returning *
             `,
             [
-                body.industry,
-                body.airtable_id ?? null
+                body.name,
+                body.ssn ?? null,
+                body.date_of_birth ?? null,
+                body.address ?? null,
+                body.city ?? null,
+                body.state ?? null,
+                body.zip ?? null,
+                body.email ?? null,
+                body.phone ?? null,
+                body.credit_score ?? null,
+                body.bad_history ?? null
             ]
         );
 
@@ -179,7 +209,7 @@ async function createIndustry(
     }
 }
 
-async function getIndustryById(
+async function getMerchantById(
     request: Request,
     env: Env
 ): Promise<Response> {
@@ -194,14 +224,14 @@ async function getIndustryById(
         const result = await client.query(
             `
                 select *
-                from industries
+                from merchants
                 where id = $1        
             `,
             [id]
         );
 
         if(result.rowCount === 0) {
-            return fail("Industry Not Found", 404)
+            return fail("Merchant Not Found", 404)
         }
 
         return ok(result.rows[0]);
@@ -209,10 +239,10 @@ async function getIndustryById(
         return fail(err?.message ?? String(err), 500)
     } finally {
         await client.end().catch(() => {});
-    }
+    }  
 }
 
-async function listIndustries(
+async function listMerchants(
     request: Request,
     env: Env
 ): Promise<Response> {
@@ -228,7 +258,7 @@ async function listIndustries(
         const result = await client.query(
             `
                 select *
-                from industries
+                from merchants
                 order by id desc
                 limit $1
                 offset $2

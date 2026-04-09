@@ -1,8 +1,9 @@
-import { fail } from "node:assert";
 import { businessRouter } from "./routes/businesses";
 import { debugRouter } from "./routes/debug";
 import { healthRouter } from "./routes/health";
 import { industryRouter } from "./routes/industries";
+import { merchantRouter } from "./routes/merchants";
+import { fail } from "./utils/response";
 
 export default {
 	async fetch(request, env, ctx): Promise<Response> {
@@ -24,7 +25,12 @@ export default {
 
 		// ======== Industries ==========
 		if(pathname.startsWith("/industries")) {
-			return industryRouter(request, env)
+			return industryRouter(request, env);
+		}
+
+		// ======== Merchants ===========
+		if(pathname.startsWith("/merchants")) {
+			return merchantRouter(request, env);
 		}
 
 		// ======== DB Health ==========
@@ -37,7 +43,6 @@ export default {
 			return debugRouter(request, env);
 		}
 
-		// return fail(`Endpoint Not Found, URL: ${url}`);
-		return fail("Endpoint Not Found");
+		return fail(`Endpoint Not Found, URL: ${url}`);
 	},
 } satisfies ExportedHandler<Env>;

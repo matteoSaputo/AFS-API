@@ -22,6 +22,20 @@ export type BusinessBody = {
 };
 
 export type IndustryBody = {
-  industry?: string | null,
+  industry?: string | null;
   airtable_id?: string | null;
+}
+
+export type MerchantBody = {
+  name?: string | null;
+  ssn?: string | null;
+  date_of_birth?: string | null;
+  address?: string | null;
+  city?: string | null;
+  state?: string | null;
+  zip?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  credit_score?: number | null;
+  bad_history?: string | null;
 }
