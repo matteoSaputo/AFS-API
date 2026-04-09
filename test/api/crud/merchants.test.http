@@ -1,0 +1,29 @@
+GET {{baseUrl}}/merchants HTTP/1.1
+###
+POST {{baseUrl}}/merchants HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "Matteo Saputo",
+    "ssn": "123456789",
+    "date_of_birth": "2001-12-12"
+}
+###
+POST {{baseUrl}}/merchants HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "Imani Stewart",
+    "ssn": "456789123",
+    "date_of_birth": "2002-10-30"
+}
+###
+GET {{baseUrl}}/merchants/1 HTTP/1.1
+###
+PATCH {{baseUrl}}/merchants/1
+
+{
+    "address": "123 main st"
+}
+###
+DELETE {{baseUrl}}/merchants/3 HTTP/1.1

@@ -25,7 +25,8 @@ Content-Type: application/json
 
 {
   "city": "Pheonix",
-  "state": "AZ"
+  "state": "AZ",
+  "start_date": "2001-12-31"
 }
 ###
 DELETE {{baseUrl}}/businesses/6
