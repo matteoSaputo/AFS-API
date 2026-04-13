@@ -14,11 +14,13 @@ export type ListOptions = {
 
 export type GetByIdOptions = {
   table: string;
+  id?: string | number;
   notFoundMessage?: string;
 };
 
 export type DeleteOptions = {
   table: string;
+  id?: string | number;
   notFoundMessage?: string;
 };
 
@@ -32,8 +34,9 @@ export type CreateOptions<T extends Record<string, any>> = {
 
 export type PatchOptions<T extends Record<string, any>> = {
   table: string;
-  body?: T;
   allowedFields: (keyof T)[];
+  body?: T;
+  id?: string | number;
   notFoundMessage?: string;
   validator?: Validator<T>;
 }
