@@ -2,7 +2,7 @@ import type { Env, IndustryBody } from "../utils/types";
 import { fail } from "../utils/response";
 import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud";
 
-const table = "industries"
+const tableName = "industries"
 const allowedFields: (keyof IndustryBody)[] = [
     "industry", 
     "airtable_id"
@@ -58,8 +58,8 @@ async function deleteIndustryById(
         request,
         env,
         {
-            table: table,
-            notFoundMessage: "Industry to Delete Not Found"
+            table: tableName,
+            notFoundMessage: "Industry to delete Not Found"
         }
     )
 }
@@ -72,9 +72,9 @@ async function patchIndustryById(
         request,
         env,
         {
-            table: table,
+            table: tableName,
             allowedFields: allowedFields,
-            notFoundMessage: "Industry to Update Not Found"
+            notFoundMessage: "Industry to update Not Found"
         }
     )
 }
@@ -87,7 +87,7 @@ async function createIndustry(
         request,
         env,
         {
-            table: table,
+            table: tableName,
             allowedFields: allowedFields,
             requiredFields: requiredFields
         }
@@ -102,8 +102,8 @@ async function getIndustryById(
         request,
         env,
         {
-            table: table,
-            notFoundMessage: "Industry to Read Not Found"
+            table: tableName,
+            notFoundMessage: "Industry to read Not Found"
         }
     )
 }
@@ -116,7 +116,7 @@ async function listIndustries(
         request,
         env,
         {
-            table: table,
+            table: tableName,
             orderBy: "id desc"
         }
     )
