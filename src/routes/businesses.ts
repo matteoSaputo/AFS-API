@@ -130,7 +130,8 @@ async function createBusiness(
         env,
         {
             table: tableName,
-            allowedFields: allowedFields
+            allowedFields: allowedFields,
+            requiredFields: requiredFields
         }
     )
 }
