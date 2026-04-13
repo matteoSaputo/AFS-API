@@ -1,7 +1,44 @@
+// ================ DB ===================
 export interface Env {
   HYPERDRIVE: Hyperdrive;
 };
 
+// ================ Validator ==================
+export type Validator<T> = (body: T) => string | null
+
+// ================ Method Options ==================
+export type ListOptions = {
+  table: string;
+  orderBy?: string;
+}
+
+export type GetByIdOptions = {
+  table: string;
+  notFoundMessage?: string;
+};
+
+export type DeleteOptions = {
+  table: string;
+  notFoundMessage?: string;
+};
+
+export type CreateOptions<T extends Record<string, any>> = {
+  table: string;
+  body?: T;
+  allowedFields: (keyof T)[];
+  requiredFields?: (keyof T)[];
+  validator?: Validator<T>;
+};
+
+export type PatchOptions<T extends Record<string, any>> = {
+  table: string;
+  body?: T;
+  allowedFields: (keyof T)[];
+  notFoundMessage?: string;
+  validator?: Validator<T>;
+}
+
+// ================ Request/Response Bodies ==================
 export type BusinessBody = {
   business_legal_name?: string | null;
   dba?: string | null;
@@ -24,7 +61,7 @@ export type BusinessBody = {
 export type IndustryBody = {
   industry?: string | null;
   airtable_id?: string | null;
-}
+};
 
 export type MerchantBody = {
   name?: string | null;
@@ -38,4 +75,4 @@ export type MerchantBody = {
   phone?: string | null;
   credit_score?: number | null;
   bad_history?: string | null;
-}
+};

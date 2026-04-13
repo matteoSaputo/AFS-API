@@ -1,6 +1,15 @@
-import { makeClient } from "../db/client";
 import type { Env, IndustryBody } from "../utils/types";
-import { ok, fail } from "../utils/response";
+import { fail } from "../utils/response";
+import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud";
+
+const tableName = "industries"
+const allowedFields: (keyof IndustryBody)[] = [
+    "industry", 
+    "airtable_id"
+]
+const requiredFields: (keyof IndustryBody)[] = [
+    "industry"
+]
 
 export async function industryRouter(
     request: Request,
@@ -45,203 +54,70 @@ async function deleteIndustryById(
     request: Request, 
     env: Env,
 ): Promise<Response> {
-    const url = new URL(request.url);
-    const id = url.pathname.split("/")[2];
-
-    const client = makeClient(env);
-
-    try {
-        await client.connect()
-
-        const result = await client.query(
-            `
-                delete from industries
-                where id = $1
-                returning *
-            `,
-            [id]
-        )
-
-        if(result.rowCount === 0){
-            return fail("Industry Not Found", 404);
+    return deleteRecordById(
+        request,
+        env,
+        {
+            table: tableName,
+            notFoundMessage: "Industry to delete Not Found"
         }
-
-        return ok(result.rows[0]);
-    } catch (err: any) {
-        return fail(err?.message ?? String(err), 500);
-    } finally {
-        await client.end().catch(() => {})
-    }
+    )
 }
 
 async function patchIndustryById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    const url = new URL(request.url)
-    const id = url.pathname.split("/")[2];
-
-    let body: IndustryBody;
-    try {
-        body = await request.json<IndustryBody>();
-    } catch {
-        return fail("Invalid JSON body", 400);
-    }
-
-    const allowedFields: (keyof IndustryBody)[] = [
-        "industry",
-        "airtable_id"
-    ];
-
-    const entries = Object.entries(body).filter(
-        ([key, value]) => 
-            allowedFields.includes(key as keyof IndustryBody) &&
-            value !== undefined
-    );
-
-    if(entries.length === 0) {
-        return fail("No valid fields provided for update", 400);
-    }
-
-    const setClauses = entries.map(
-        ([key], index) => `${key} = $${index + 1}`
-    )
-    const values = entries.map(([, value]) => value);
-
-    const client = makeClient(env);
-
-    try {
-        await client.connect();
-
-        const result = await client.query(
-            `
-                update industries
-                set ${setClauses.join(", ")}
-                where id = $${values.length + 1}
-                returning *
-            `,
-            [...values, id]
-        );
-
-        if(result.rowCount === 0){
-            return fail("Industry Not Found", 404)
+    return patchRecordById(
+        request,
+        env,
+        {
+            table: tableName,
+            allowedFields: allowedFields,
+            notFoundMessage: "Industry to update Not Found"
         }
-
-        return ok(result.rows[0])
-    } catch (err: any) {
-        return fail(err?.message ?? String(err), 500);
-    } finally {
-        await client.end().catch(() => {})
-    }
+    )
 }
 
 async function createIndustry(
     request: Request,
     env: Env,
 ): Promise<Response> {
-    let body: IndustryBody
-
-    try {
-        body = await request.json<IndustryBody>();
-    } catch  {
-        return fail("Invalid JSON body", 400)
-    }
-
-    if(!body.industry){
-        return fail("Industry is required", 400)
-    }
-
-    const client = makeClient(env);
-
-    try {
-        await client.connect();
-        
-        const result = await client.query(
-            `
-                insert into industries (
-                    industry,
-                    airtable_id
-                )
-                values ($1, $2)
-                returning *
-            `,
-            [
-                body.industry,
-                body.airtable_id ?? null
-            ]
-        );
-
-        return ok(result.rows[0])
-    } catch (err: any) {
-        return fail(err?.message ?? String(err), 500)
-    } finally {
-        await client.end().catch(() => {})
-    }
+    return createRecord<IndustryBody>(
+        request,
+        env,
+        {
+            table: tableName,
+            allowedFields: allowedFields,
+            requiredFields: requiredFields
+        }
+    );
 }
 
 async function getIndustryById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    const url = new URL(request.url);
-    const id = url.pathname.split("/")[2];
-
-    const client = makeClient(env);
-
-    try {
-        await client.connect();
-
-        const result = await client.query(
-            `
-                select *
-                from industries
-                where id = $1        
-            `,
-            [id]
-        );
-
-        if(result.rowCount === 0) {
-            return fail("Industry Not Found", 404)
+    return getRecordById(
+        request,
+        env,
+        {
+            table: tableName,
+            notFoundMessage: "Industry to read Not Found"
         }
-
-        return ok(result.rows[0]);
-    } catch (err: any) {
-        return fail(err?.message ?? String(err), 500)
-    } finally {
-        await client.end().catch(() => {});
-    }
+    )
 }
 
 async function listIndustries(
     request: Request,
     env: Env
 ): Promise<Response> {
-    const url = new URL(request.url);
-    const client = makeClient(env);
-
-    const limit = Number(url.searchParams.get("limit") ?? "25")
-    const offset = Number(url.searchParams.get("offset") ?? "0")
-
-    try {
-        await client.connect();
-
-        const result = await client.query(
-            `
-                select *
-                from industries
-                order by id desc
-                limit $1
-                offset $2
-            `,
-            [limit, offset]
-        );
-
-        return ok(result.rows, {
-            count: result.rowCount,
-        });
-    } catch (err: any) {
-        return fail(err?.message ?? String(err), 500);
-    } finally {
-        await client.end().catch(() => {})
-    }
+    return listRecords(
+        request,
+        env,
+        {
+            table: tableName,
+            orderBy: "id desc"
+        }
+    )
 }
