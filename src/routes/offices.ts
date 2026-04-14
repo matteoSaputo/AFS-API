@@ -1,0 +1,105 @@
+import type { Env, OfficeBody } from "../utils/types";
+import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud";
+import { Router } from "../db/routers";
+
+const tableName = "offices"
+const allowedFields: (keyof OfficeBody)[] = [
+    "location",
+    "status",
+    "airtable_id",
+    "manager_id"
+]
+const requiredFields: (keyof OfficeBody)[] = [
+    "location"
+]
+
+export async function officesRouter(
+    request: Request,
+    env: Env
+): Promise<Response> {
+    return Router(
+        request,
+        env,
+        {
+            path: "offices",
+            method_functions: {
+                create: createOffice,
+                read: getOfficeById,
+                update: patchOfficeById,
+                delete: deleteOfficeById,
+                list: listOffices
+            }
+        }
+    )
+}
+
+async function deleteOfficeById(
+    request: Request,
+    env: Env
+): Promise<Response> {
+    return deleteRecordById(
+        request, 
+        env,
+        {
+            table: tableName,
+            notFoundMessage: "Office to delete Not Found"
+        }
+    );
+}
+
+async function patchOfficeById(
+    request: Request,
+    env: Env
+): Promise<Response> {
+    return patchRecordById(
+        request,
+        env,
+        {
+            table: tableName,
+            allowedFields: allowedFields,
+            notFoundMessage: "Office to update Not Found",
+        }
+    );
+}
+
+async function createOffice(
+    request: Request,
+    env: Env
+): Promise<Response> {
+    return createRecord(
+        request,
+        env,
+        {
+            table: tableName,
+            allowedFields: allowedFields,
+            requiredFields: requiredFields
+        }
+    );
+}
+
+async function getOfficeById(
+    request: Request,
+    env: Env
+): Promise<Response> {
+    return getRecordById(
+        request,
+        env,
+        {
+            table: tableName,
+            notFoundMessage: "Office to read Not Found"
+        }
+    );
+}
+
+async function listOffices(
+    request: Request,
+    env: Env
+): Promise<Response> {
+    return listRecords(
+        request,
+        env,
+        {
+            table: tableName,
+        }
+    );
+}
