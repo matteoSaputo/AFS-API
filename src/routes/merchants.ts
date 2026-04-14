@@ -1,6 +1,6 @@
 import type { Env, MerchantBody } from "../utils/types";
-import { fail } from "../utils/response";
 import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud";
+import { Router } from "../db/routers";
 
 const tableName = "merchants";
 const allowedFields: (keyof MerchantBody)[] = [
@@ -24,39 +24,20 @@ export async function merchantRouter(
     request: Request,
     env: Env
 ): Promise<Response> {
-    const url = new URL(request.url);
-    const pathname = url.pathname
-    const method = request.method
-
-    // === CREATE/POST ===
-    if(method === "POST"){
-        return createMerchant(request, env);
-    }
-
-    // === READ/GET ===
-    if (method === "GET" ) {
-        if(/^\/merchants\/\d+$/.test(pathname)){
-            return getMerchantById(request, env);
+    return Router(
+        request,
+        env,
+        {
+            path: "merchants",
+            method_functions: {
+                create: createMerchant,
+                read: getMerchantById,
+                update: patchMerchantById,
+                delete: deleteMerchantById,
+                list: listMerchants
+            }
         }
-
-        return listMerchants(request, env);
-    }
-
-    // === UPDATE/PATCH ===
-    if (method === "PATCH") {
-        if(/^\/merchants\/\d+$/.test(pathname)){
-            return patchMerchantById(request, env)
-        }
-    }
-
-    // === DELETE ===
-    if (method === "DELETE") {
-        if(/^\/merchants\/\d+$/.test(pathname)){
-            return deleteMerchantById(request, env)
-        }
-    }
-
-    return fail("Method or Endpoint Not Found", 404)
+    )
 }
 
 async function deleteMerchantById(

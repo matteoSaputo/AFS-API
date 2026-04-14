@@ -6,7 +6,9 @@ export interface Env {
 // ================ Validator ==================
 export type Validator<T> = (body: T) => string | null
 
-// ================ Method Options ==================
+// ================ Methods ==================
+export type CrudMethod = (request: Request, env: Env) => Promise<Response>
+
 export type ListOptions = {
   table: string;
   orderBy?: string;
@@ -39,6 +41,18 @@ export type PatchOptions<T extends Record<string, any>> = {
   id?: string | number;
   notFoundMessage?: string;
   validator?: Validator<T>;
+}
+
+// ================ Router Config =================
+export type RouterConfig<T extends Record<string, any>> = {
+  path: string;
+  method_functions: {
+    create: CrudMethod,
+    read: CrudMethod,
+    update: CrudMethod,
+    delete: CrudMethod,
+    list: CrudMethod
+  }
 }
 
 // ================ Request/Response Bodies ==================
@@ -79,3 +93,10 @@ export type MerchantBody = {
   credit_score?: number | null;
   bad_history?: string | null;
 };
+
+export type OfficeBody ={
+  location?: string | null;
+  status?: string | null;
+  airtable_id?: string | null;
+  manager_id?: number | null
+}

@@ -1,6 +1,7 @@
 import type { BusinessBody, Env } from "../utils/types";
 import { fail } from "../utils/response";
 import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud";
+import { Router } from "../db/routers";
 
 const tableName = "businesses"
 const allowedFields: (keyof BusinessBody)[] = [
@@ -30,39 +31,20 @@ export async function businessRouter(
     request: Request,
     env: Env
 ): Promise<Response> {
-    const url = new URL(request.url);
-    const pathname = url.pathname
-    const method = request.method
-
-    // === CREATE/POST ===
-    if(method === "POST"){
-        return createBusiness(request, env);
-    }
-
-    // === READ/GET ===
-    if (method === "GET" ) {
-        if(/^\/businesses\/\d+$/.test(pathname)){
-            return getBusinessById(request, env);
+    return Router(
+        request, 
+        env,
+        {
+            path: "businesses",
+            method_functions: {
+                create: createBusiness,
+                read: getBusinessById,
+                update: patchBusinessById,
+                delete: deleteBusinessById,
+                list: listBusinesses
+            }
         }
-
-        return listBusinesses(request, env);
-    }
-
-    // === UPDATE/PATCH ===
-    if (method === "PATCH") {
-        if(/^\/businesses\/\d+$/.test(pathname)){
-            return patchBusinessById(request, env)
-        }
-    }
-    
-    // === DELETE ===
-    if (method === "DELETE") {
-        if(/^\/businesses\/\d+$/.test(pathname)){
-            return deleteBusinessById(request, env)
-        }
-    }
-
-    return fail("Method or Endpoint Not Found", 404)
+    )
 }
 
 async function deleteBusinessById(

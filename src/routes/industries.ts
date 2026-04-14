@@ -1,6 +1,6 @@
 import type { Env, IndustryBody } from "../utils/types";
-import { fail } from "../utils/response";
 import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud";
+import { Router } from "../db/routers";
 
 const tableName = "industries"
 const allowedFields: (keyof IndustryBody)[] = [
@@ -15,39 +15,20 @@ export async function industryRouter(
     request: Request,
     env: Env
 ): Promise<Response> {
-    const url = new URL(request.url);
-    const pathname = url.pathname
-    const method = request.method
-
-    // === CREATE/POST ===
-    if(method === "POST"){
-        return createIndustry(request, env);
-    }
-
-    // === READ/GET ===
-    if (method === "GET" ) {
-        if(/^\/industries\/\d+$/.test(pathname)){
-            return getIndustryById(request, env);
+    return Router(
+        request,
+        env,
+        {
+            path: "industries",
+            method_functions: {
+                create: createIndustry,
+                read: getIndustryById,
+                update: patchIndustryById,
+                delete: deleteIndustryById,
+                list: listIndustries
+            }
         }
-
-        return listIndustries(request, env);
-    }
-
-    // === UPDATE/PATCH ===
-    if (method === "PATCH") {
-        if(/^\/industries\/\d+$/.test(pathname)){
-            return patchIndustryById(request, env)
-        }
-    }
-
-    // === DELETE ===
-    if (method === "DELETE") {
-        if(/^\/industries\/\d+$/.test(pathname)){
-            return deleteIndustryById(request, env)
-        }
-    }
-
-    return fail("Method or Endpoint Not Found", 404)
+    )
 }
 
 async function deleteIndustryById(
