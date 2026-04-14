@@ -94,9 +94,20 @@ export type MerchantBody = {
   bad_history?: string | null;
 };
 
-export type OfficeBody ={
+export type OfficeBody = {
   location?: string | null;
   status?: string | null;
   airtable_id?: string | null;
   manager_id?: number | null
+}
+
+export type EmployeeBody = {
+  name?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  employment_status?: string | null;
+  commision_split_percent?: number | null;
+  role?: string | null;
+  airtable_id?: string | null;
+  office_id?: number | null;
 }

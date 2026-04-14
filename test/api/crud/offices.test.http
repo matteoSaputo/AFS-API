@@ -1,0 +1,18 @@
+GET {{baseUrl}}/offices
+###
+POST {{baseUrl}}/offices
+Content-Type: application/json
+
+{
+    "location": "RXR"
+}
+###
+PATCH {{baseUrl}}/offices/1
+
+{
+    "status": "open"
+}
+###
+GET {{baseUrl}}/offices/2
+###
+DELETE {{baseUrl}}/offices/2
