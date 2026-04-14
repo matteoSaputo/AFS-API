@@ -1,6 +1,6 @@
-import type { Env, IndustryBody } from "../utils/types";
-import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud";
-import { Router } from "../db/routers";
+import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud"
+import { Router } from "../db/routers"
+import { IndustryBody, Env } from "../utils/types"
 
 const tableName = "industries"
 const allowedFields: (keyof IndustryBody)[] = [
@@ -21,41 +21,26 @@ export async function industryRouter(
         {
             path: "industries",
             method_functions: {
+                list: listIndustries,
                 create: createIndustry,
                 read: getIndustryById,
                 update: patchIndustryById,
-                delete: deleteIndustryById,
-                list: listIndustries
+                delete: deleteIndustryById
             }
         }
     )
 }
 
-async function deleteIndustryById(
-    request: Request, 
-    env: Env,
-): Promise<Response> {
-    return deleteRecordById(
-        request,
-        env,
-        {
-            table: tableName,
-            notFoundMessage: "Industry to delete Not Found"
-        }
-    )
-}
-
-async function patchIndustryById(
+async function listIndustries(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return patchRecordById(
+    return listRecords(
         request,
         env,
         {
             table: tableName,
-            allowedFields: allowedFields,
-            notFoundMessage: "Industry to update Not Found"
+            orderBy: "id desc"
         }
     )
 }
@@ -89,16 +74,34 @@ async function getIndustryById(
     )
 }
 
-async function listIndustries(
+async function patchIndustryById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return listRecords(
+    return patchRecordById(
         request,
         env,
         {
             table: tableName,
-            orderBy: "id desc"
+            allowedFields: allowedFields,
+            notFoundMessage: "Industry to update Not Found"
         }
     )
 }
+
+async function deleteIndustryById(
+    request: Request, 
+    env: Env,
+): Promise<Response> {
+    return deleteRecordById(
+        request,
+        env,
+        {
+            table: tableName,
+            notFoundMessage: "Industry to delete Not Found"
+        }
+    )
+}
+
+
+

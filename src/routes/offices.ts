@@ -1,6 +1,6 @@
-import type { Env, OfficeBody } from "../utils/types";
-import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud";
-import { Router } from "../db/routers";
+import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud"
+import { Router } from "../db/routers"
+import { OfficeBody, Env } from "../utils/types"
 
 const tableName = "offices"
 const allowedFields: (keyof OfficeBody)[] = [
@@ -23,41 +23,25 @@ export async function officesRouter(
         {
             path: "offices",
             method_functions: {
+                list: listOffices,
                 create: createOffice,
                 read: getOfficeById,
                 update: patchOfficeById,
-                delete: deleteOfficeById,
-                list: listOffices
+                delete: deleteOfficeById
             }
         }
     )
 }
 
-async function deleteOfficeById(
+async function listOffices(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return deleteRecordById(
-        request, 
-        env,
-        {
-            table: tableName,
-            notFoundMessage: "Office to delete Not Found"
-        }
-    );
-}
-
-async function patchOfficeById(
-    request: Request,
-    env: Env
-): Promise<Response> {
-    return patchRecordById(
+    return listRecords(
         request,
         env,
         {
             table: tableName,
-            allowedFields: allowedFields,
-            notFoundMessage: "Office to update Not Found",
         }
     );
 }
@@ -91,15 +75,31 @@ async function getOfficeById(
     );
 }
 
-async function listOffices(
+async function patchOfficeById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return listRecords(
+    return patchRecordById(
         request,
         env,
         {
             table: tableName,
+            allowedFields: allowedFields,
+            notFoundMessage: "Office to update Not Found",
+        }
+    );
+}
+
+async function deleteOfficeById(
+    request: Request,
+    env: Env
+): Promise<Response> {
+    return deleteRecordById(
+        request, 
+        env,
+        {
+            table: tableName,
+            notFoundMessage: "Office to delete Not Found"
         }
     );
 }

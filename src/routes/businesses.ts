@@ -1,7 +1,6 @@
-import type { BusinessBody, Env } from "../utils/types";
-import { fail } from "../utils/response";
-import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud";
-import { Router } from "../db/routers";
+import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud"
+import { Router } from "../db/routers"
+import { BusinessBody, Env } from "../utils/types"
 
 const tableName = "businesses"
 const allowedFields: (keyof BusinessBody)[] = [
@@ -37,57 +36,14 @@ export async function businessRouter(
         {
             path: "businesses",
             method_functions: {
+                list: listBusinesses,
                 create: createBusiness,
                 read: getBusinessById,
                 update: patchBusinessById,
-                delete: deleteBusinessById,
-                list: listBusinesses
+                delete: deleteBusinessById
             }
         }
     )
-}
-
-async function deleteBusinessById(
-    request: Request, 
-    env: Env
-): Promise<Response> {
-    return deleteRecordById(
-        request,
-        env,
-        {
-            table: tableName,
-            notFoundMessage: "Business to delete Not Found"
-        }
-    )
-}
-
-async function patchBusinessById(
-    request: Request, 
-    env: Env
-): Promise<Response> {
-    return patchRecordById(
-        request,
-        env,
-        {
-            table: tableName,
-            allowedFields: allowedFields,
-            notFoundMessage: "Business to update Not Found"
-        }
-    );
-}
-
-async function getBusinessById(
-    request: Request, 
-    env: Env
-): Promise<Response> {
-    return getRecordById(
-        request,
-        env,
-        {
-            table: tableName,
-            notFoundMessage: "Business to read Not Found"
-        }
-    );
 }
 
 async function listBusinesses(
@@ -114,6 +70,49 @@ async function createBusiness(
             table: tableName,
             allowedFields: allowedFields,
             requiredFields: requiredFields
+        }
+    )
+}
+
+async function getBusinessById(
+    request: Request, 
+    env: Env
+): Promise<Response> {
+    return getRecordById(
+        request,
+        env,
+        {
+            table: tableName,
+            notFoundMessage: "Business to read Not Found"
+        }
+    );
+}
+
+async function patchBusinessById(
+    request: Request, 
+    env: Env
+): Promise<Response> {
+    return patchRecordById(
+        request,
+        env,
+        {
+            table: tableName,
+            allowedFields: allowedFields,
+            notFoundMessage: "Business to update Not Found"
+        }
+    );
+}
+
+async function deleteBusinessById(
+    request: Request, 
+    env: Env
+): Promise<Response> {
+    return deleteRecordById(
+        request,
+        env,
+        {
+            table: tableName,
+            notFoundMessage: "Business to delete Not Found"
         }
     )
 }

@@ -1,6 +1,6 @@
-import type { Env, MerchantBody } from "../utils/types";
-import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud";
-import { Router } from "../db/routers";
+import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud"
+import { Router } from "../db/routers"
+import { MerchantBody, Env } from "../utils/types"
 
 const tableName = "merchants";
 const allowedFields: (keyof MerchantBody)[] = [
@@ -30,41 +30,25 @@ export async function merchantRouter(
         {
             path: "merchants",
             method_functions: {
+                list: listMerchants,                
                 create: createMerchant,
                 read: getMerchantById,
                 update: patchMerchantById,
-                delete: deleteMerchantById,
-                list: listMerchants
+                delete: deleteMerchantById
             }
         }
     )
 }
 
-async function deleteMerchantById(
+async function listMerchants(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return deleteRecordById(
-        request, 
-        env,
-        {
-            table: tableName,
-            notFoundMessage: "Merchant to delete Not Found"
-        }
-    );
-}
-
-async function patchMerchantById(
-    request: Request,
-    env: Env
-): Promise<Response> {
-    return patchRecordById(
+    return listRecords(
         request,
         env,
         {
             table: tableName,
-            allowedFields: allowedFields,
-            notFoundMessage: "Merchant to update Not Found",
         }
     );
 }
@@ -98,15 +82,32 @@ async function getMerchantById(
     );
 }
 
-async function listMerchants(
+async function patchMerchantById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return listRecords(
+    return patchRecordById(
         request,
         env,
         {
             table: tableName,
+            allowedFields: allowedFields,
+            notFoundMessage: "Merchant to update Not Found",
+        }
+    );
+}
+
+
+async function deleteMerchantById(
+    request: Request,
+    env: Env
+): Promise<Response> {
+    return deleteRecordById(
+        request, 
+        env,
+        {
+            table: tableName,
+            notFoundMessage: "Merchant to delete Not Found"
         }
     );
 }
