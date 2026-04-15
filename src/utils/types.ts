@@ -44,7 +44,7 @@ export type PatchOptions<T extends Record<string, any>> = {
 }
 
 // ================ Router Config =================
-export type RouterConfig<T extends Record<string, any>> = {
+export type RouterConfig = {
   path: string;
   method_functions: {
     create: CrudMethod,
@@ -112,3 +112,103 @@ export type Employee = {
   office_id?: number | null;
 }
 
+export type DataSource = {
+  data_source?: string | null;
+  provider?: string | null;
+  date_uploaded?: string | null;
+  number_of_leads?: string | null;
+  airtable_id?: string | null;
+}
+
+export type Lender = {
+  lender?: string | null;
+  product?: string | null;
+  min_revenue?: number | null;
+  min_tib_months?: number | null;
+  min_positions?: number | null;
+  max_positions?: number | null;
+  min_credit_score?: number | null;
+  status?: string | null;
+  airtable_id?: string | null;
+}
+
+export type ConditionalGuideline = {
+  guidline?: string | null;
+  conditional_state?: string | null;
+  conditional_entity_type?: string | null;
+  conditional_revenue?: number | null;
+  conditional_tib_months?: number | null;
+  conditional_min_positions?: number | null;
+  conditional_max_positions?: number | null;
+  conditional_credit_score?: number | null;
+  industry_id?: number | null;
+  lender_id?: number | null;
+  airtable_id?: string | null;
+}
+
+export type Package = {
+  status?: string | null;
+  date_received?: string | null;
+  centrex_id?: string | null;
+  drive_folder_id?: string | null;
+  airtable_id?: string | null;
+  business_id?: string | null;
+  owner_id?: number | null;
+  co_owner_id?: number | null;
+  owner_ownership_percent?: number | null;
+  co_owner_ownership_percent?: number | null;  
+}
+
+export type Deal = {
+  date_processed?: string | null;
+  stage?: string | null;
+  status?: string | null;
+  airtable_id?: string | null;
+  package_id?: number | null;
+  data_source_id?: number | null;
+}
+
+export type Submission = {
+  date_submitted?: string | null;
+  result?: string | null;
+  feedback?: string | null;
+  airtable_id?: string | null;
+  deal_id?: number | null;
+  lender_id?: number | null;
+}
+
+export type Offer = {
+  amount?: number | null;
+  payment_cycles?: number | null;
+  payment_frequency?: string | null;
+  buy_rate?: number | null;
+  sell_rate?: number | null;
+  airtable_id?: string | null;
+  submission_id?: string | null;
+}
+
+export type Contract = {
+  type?: string | null;
+  funding_amount?: number | null;
+  loc_amount?: number | null;
+  payment_frequency?: string | null;
+  fee_percent?: number | null;
+  interest_rate?: number | null;
+  airtable_id?: string | null;
+  offer_id?: number | null;
+}
+
+export type Funding = {
+  date_funded?: string | null;
+  points?: number | null;
+  commission_status?: number | null;
+  date_lender_paid?: string | null;
+  airtable_id?: string | null;
+  offer_id?: string | null;
+}
+
+export type Assignments = {
+  employee_id?: number | null;
+  deal_id?: number | null;
+  deal_role?: number | null;
+}
