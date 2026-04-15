@@ -56,7 +56,7 @@ export type RouterConfig<T extends Record<string, any>> = {
 }
 
 // ================ Request/Response Bodies ==================
-export type BusinessBody = {
+export type Business = {
   business_legal_name?: string | null;
   dba?: string | null;
   ein?: string | null;
@@ -75,12 +75,12 @@ export type BusinessBody = {
   airtable_id?: string | null;
 };
 
-export type IndustryBody = {
+export type Industry = {
   industry?: string | null;
   airtable_id?: string | null;
 };
 
-export type MerchantBody = {
+export type Merchant = {
   name?: string | null;
   ssn?: string | null;
   date_of_birth?: string | null;
@@ -94,14 +94,14 @@ export type MerchantBody = {
   bad_history?: string | null;
 };
 
-export type OfficeBody = {
+export type Office = {
   location?: string | null;
   status?: string | null;
   airtable_id?: string | null;
   manager_id?: number | null
 }
 
-export type EmployeeBody = {
+export type Employee = {
   name?: string | null;
   email?: string | null;
   phone?: string | null;
@@ -111,3 +111,4 @@ export type EmployeeBody = {
   airtable_id?: string | null;
   office_id?: number | null;
 }
+

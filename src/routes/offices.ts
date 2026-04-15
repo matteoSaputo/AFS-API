@@ -1,15 +1,15 @@
 import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud"
 import { Router } from "../db/routers"
-import { OfficeBody, Env } from "../utils/types"
+import { Office, Env } from "../utils/types"
 
 const tableName = "offices"
-const allowedFields: (keyof OfficeBody)[] = [
+const allowedFields: (keyof Office)[] = [
     "location",
     "status",
     "airtable_id",
     "manager_id"
 ]
-const requiredFields: (keyof OfficeBody)[] = [
+const requiredFields: (keyof Office)[] = [
     "location"
 ]
 
@@ -50,7 +50,7 @@ async function createOffice(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return createRecord(
+    return createRecord<Office>(
         request,
         env,
         {
@@ -79,7 +79,7 @@ async function patchOfficeById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return patchRecordById(
+    return patchRecordById<Office>(
         request,
         env,
         {

@@ -1,9 +1,9 @@
 import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud"
 import { Router } from "../db/routers"
-import { BusinessBody, Env } from "../utils/types"
+import { Business, Env } from "../utils/types"
 
 const tableName = "businesses"
-const allowedFields: (keyof BusinessBody)[] = [
+const allowedFields: (keyof Business)[] = [
     "business_legal_name",
     "ein",
     "industry_id",
@@ -21,7 +21,7 @@ const allowedFields: (keyof BusinessBody)[] = [
     "description",
     "airtable_id"
 ]
-const requiredFields: (keyof BusinessBody)[] = [
+const requiredFields: (keyof Business)[] = [
     "business_legal_name",
     "ein",
 ]
@@ -63,7 +63,7 @@ async function createBusiness(
     request: Request, 
     env: Env
 ): Promise<Response> {
-    return createRecord(
+    return createRecord<Business>(
         request,
         env,
         {
@@ -92,7 +92,7 @@ async function patchBusinessById(
     request: Request, 
     env: Env
 ): Promise<Response> {
-    return patchRecordById(
+    return patchRecordById<Business>(
         request,
         env,
         {

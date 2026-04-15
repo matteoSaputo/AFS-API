@@ -1,9 +1,9 @@
 import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud"
 import { Router } from "../db/routers"
-import { MerchantBody, Env } from "../utils/types"
+import { Merchant, Env } from "../utils/types"
 
 const tableName = "merchants";
-const allowedFields: (keyof MerchantBody)[] = [
+const allowedFields: (keyof Merchant)[] = [
     "name",
     "ssn",
     "date_of_birth",
@@ -16,7 +16,7 @@ const allowedFields: (keyof MerchantBody)[] = [
     "credit_score",
     "bad_history",
 ];
-const requiredFields: (keyof MerchantBody)[] = [
+const requiredFields: (keyof Merchant)[] = [
     "name",
 ];
 
@@ -57,7 +57,7 @@ async function createMerchant(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return createRecord(
+    return createRecord<Merchant>(
         request,
         env,
         {
@@ -86,7 +86,7 @@ async function patchMerchantById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return patchRecordById(
+    return patchRecordById<Merchant>(
         request,
         env,
         {
