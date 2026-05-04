@@ -1,0 +1,21 @@
+POST {{baseUrl}}/submissions
+Content-Type: application/json
+
+{
+    "date_submitted": "05/04/2025",
+    "deal_id": 2,
+    "lender_id": 2
+}
+###
+GET {{baseUrl}}/submissions/1
+###
+PATCH {{baseUrl}}/submissions/1
+Content-Type: application/json
+
+{
+    "feedback": "low revenue"
+}
+###
+GET {{baseUrl}}/submissions
+###
+DELETE {{baseUrl}}/submissions/1

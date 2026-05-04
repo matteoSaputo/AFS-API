@@ -1,23 +1,20 @@
 import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud"
 import { Router } from "../db/routers"
-import { Employee, Env } from "../utils/types"
+import { DataSource, Env } from "../utils/types"
 
-const tableName = "employees"
-const allowedFields: (keyof Employee)[] = [
-    "name",
-    "email",
-    "phone",
-    "employment_status",
-    "commission_split_percent",
-    "role",
-    "airtable_id",
-    "office_id"
+const tableName = "data_sources"
+const allowedFields: (keyof DataSource)[] = [
+    "data_source",
+    "provider",
+    "date_uploaded",
+    "number_of_leads",
+    "airtable_id"
 ]
-const requiredFields: (keyof Employee)[] = [
-    "name"
+const requiredFields: (keyof DataSource)[] = [
+    "data_source"
 ]
 
-export async function employeeRouter(
+export async function dataSourceRouter(
     request: Request,
     env: Env
 ): Promise<Response> {
@@ -25,19 +22,19 @@ export async function employeeRouter(
         request,
         env,
         {
-            path: "employees",
+            path: "data_sources",
             method_functions: {
-                create: createEmployee,
-                read: getEmployeeById,
-                update: patchEmployeeById,
-                delete: deleteEmployeeById,
-                list: listEmployees
+                list: listDataSources,
+                create: createDataSource,
+                read: getDataSourceById,
+                update: patchDataSourceById,
+                delete: deleteDataSourceById
             }
         }
     )
 }
 
-async function listEmployees(
+async function listDataSources(
     request: Request,
     env: Env
 ): Promise<Response> {
@@ -51,22 +48,22 @@ async function listEmployees(
     )
 }
 
-async function createEmployee(
+async function createDataSource(
     request: Request,
-    env: Env
+    env: Env,
 ): Promise<Response> {
-    return createRecord<Employee>(
-        request, 
+    return createRecord<DataSource>(
+        request,
         env,
         {
             table: tableName,
             allowedFields: allowedFields,
             requiredFields: requiredFields
         }
-    )
+    );
 }
 
-async function getEmployeeById(
+async function getDataSourceById(
     request: Request,
     env: Env
 ): Promise<Response> {
@@ -75,44 +72,45 @@ async function getEmployeeById(
         env,
         {
             table: tableName,
-            notFoundMessage: "Employee to read Not Found"
+            notFoundMessage: "Data Source to read Not Found"
         }
     )
 }
 
-async function patchEmployeeById(
+async function patchDataSourceById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return patchRecordById<Employee>(
+    return patchRecordById<DataSource>(
         request,
         env,
         {
             table: tableName,
             allowedFields: allowedFields,
-            notFoundMessage: "Employee to update Not Found"
+            notFoundMessage: "Data Source to update Not Found"
         }
     )
 }
 
-async function deleteEmployeeById(
-    request: Request,
-    env: Env
+async function deleteDataSourceById(
+    request: Request, 
+    env: Env,
 ): Promise<Response> {
     return deleteRecordById(
         request,
         env,
         {
             table: tableName,
-            notFoundMessage: "Employee to delete Not Found"
+            notFoundMessage: "Data Source to delete Not Found"
         }
     )
 }
 
 export {
-    listEmployees,
-    createEmployee,
-    getEmployeeById,
-    patchEmployeeById,
-    deleteEmployeeById
+    listDataSources,
+    createDataSource,
+    getDataSourceById,
+    patchDataSourceById,
+    deleteDataSourceById
 }
+

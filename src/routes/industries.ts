@@ -103,5 +103,11 @@ async function deleteIndustryById(
     )
 }
 
-
+export {
+    listIndustries,
+    createIndustry,
+    getIndustryById,
+    patchIndustryById,
+    deleteIndustryById
+}
 

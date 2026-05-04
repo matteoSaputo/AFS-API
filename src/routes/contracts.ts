@@ -1,23 +1,23 @@
 import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud"
 import { Router } from "../db/routers"
-import { Employee, Env } from "../utils/types"
+import { Contract, Env } from "../utils/types"
 
-const tableName = "employees"
-const allowedFields: (keyof Employee)[] = [
-    "name",
-    "email",
-    "phone",
-    "employment_status",
-    "commission_split_percent",
-    "role",
-    "airtable_id",
-    "office_id"
+const tableName = "contracts"
+const allowedFields: (keyof Contract)[] = [
+    "type",
+    "funding_amount",
+    "loc_amount",
+    "payment_frequency",
+    "fee_percent",
+    "interest_rate",
+    "offer_id", 
+    "airtable_id"
 ]
-const requiredFields: (keyof Employee)[] = [
-    "name"
+const requiredFields: (keyof Contract)[] = [
+    "offer_id"
 ]
 
-export async function employeeRouter(
+export async function contractRouter(
     request: Request,
     env: Env
 ): Promise<Response> {
@@ -25,19 +25,19 @@ export async function employeeRouter(
         request,
         env,
         {
-            path: "employees",
+            path: "contracts",
             method_functions: {
-                create: createEmployee,
-                read: getEmployeeById,
-                update: patchEmployeeById,
-                delete: deleteEmployeeById,
-                list: listEmployees
+                list: listContracts,
+                create: createContract,
+                read: getContractById,
+                update: patchContractById,
+                delete: deleteContractById
             }
         }
     )
 }
 
-async function listEmployees(
+async function listContracts(
     request: Request,
     env: Env
 ): Promise<Response> {
@@ -51,22 +51,22 @@ async function listEmployees(
     )
 }
 
-async function createEmployee(
+async function createContract(
     request: Request,
-    env: Env
+    env: Env,
 ): Promise<Response> {
-    return createRecord<Employee>(
-        request, 
+    return createRecord<Contract>(
+        request,
         env,
         {
             table: tableName,
             allowedFields: allowedFields,
             requiredFields: requiredFields
         }
-    )
+    );
 }
 
-async function getEmployeeById(
+async function getContractById(
     request: Request,
     env: Env
 ): Promise<Response> {
@@ -75,44 +75,45 @@ async function getEmployeeById(
         env,
         {
             table: tableName,
-            notFoundMessage: "Employee to read Not Found"
+            notFoundMessage: "Contract to read Not Found"
         }
     )
 }
 
-async function patchEmployeeById(
+async function patchContractById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return patchRecordById<Employee>(
+    return patchRecordById<Contract>(
         request,
         env,
         {
             table: tableName,
             allowedFields: allowedFields,
-            notFoundMessage: "Employee to update Not Found"
+            notFoundMessage: "Contract to update Not Found"
         }
     )
 }
 
-async function deleteEmployeeById(
-    request: Request,
-    env: Env
+async function deleteContractById(
+    request: Request, 
+    env: Env,
 ): Promise<Response> {
     return deleteRecordById(
         request,
         env,
         {
             table: tableName,
-            notFoundMessage: "Employee to delete Not Found"
+            notFoundMessage: "Contract to delete Not Found"
         }
     )
 }
 
 export {
-    listEmployees,
-    createEmployee,
-    getEmployeeById,
-    patchEmployeeById,
-    deleteEmployeeById
+    listContracts,
+    createContract,
+    getContractById,
+    patchContractById,
+    deleteContractById
 }
+

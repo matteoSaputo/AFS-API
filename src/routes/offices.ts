@@ -42,6 +42,7 @@ async function listOffices(
         env,
         {
             table: tableName,
+            orderBy: "id desc"
         }
     );
 }
@@ -102,4 +103,12 @@ async function deleteOfficeById(
             notFoundMessage: "Office to delete Not Found"
         }
     );
+}
+
+export {
+    listOffices,
+    createOffice,
+    getOfficeById,
+    patchOfficeById,
+    deleteOfficeById
 }

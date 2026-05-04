@@ -1,0 +1,18 @@
+POST {{baseUrl}}/assignments
+Content-Type: application/json
+
+{
+    "deal_role": "Opener",
+    "deal_id": 2
+}
+###
+GET {{baseUrl}}/assignments/3
+###
+PATCH {{baseUrl}}/assignments/3
+Content-Type: application/json
+
+{
+    "employee_id": 2 
+}
+###
+DELETE {{baseUrl}}/assignments/5

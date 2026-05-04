@@ -1,0 +1,21 @@
+POST {{baseUrl}}/lenders
+Content-Type: application/json
+
+{
+    "lender": "Everest",
+    "product": "MCA"
+}
+###
+GET {{baseUrl}}/lenders/1
+###
+PATCH {{baseUrl}}/lenders/1
+Content-Type: application/json
+
+{
+    "min_revenue": 3000
+}
+###
+GET {{baseUrl}}/lenders
+###
+DELETE {{baseUrl}}/lenders/1
+

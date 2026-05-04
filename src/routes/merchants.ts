@@ -49,6 +49,7 @@ async function listMerchants(
         env,
         {
             table: tableName,
+            orderBy: "id desc"
         }
     );
 }
@@ -110,4 +111,12 @@ async function deleteMerchantById(
             notFoundMessage: "Merchant to delete Not Found"
         }
     );
+}
+
+export {
+    listMerchants,
+    createMerchant,
+    getMerchantById,
+    patchMerchantById,
+    deleteMerchantById
 }

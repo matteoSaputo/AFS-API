@@ -1,0 +1,20 @@
+POST {{baseUrl}}/contracts
+Content-Type: application/json
+
+{
+    "type": "LOC",
+    "offer_id": 3
+}
+###
+GET {{baseUrl}}/contracts/1
+###
+PATCH {{baseUrl}}/contracts/1
+Content-Type: application/json
+
+{
+    "funding_amount": 100000
+}
+###
+GET {{baseUrl}}/contracts
+###
+DELETE {{baseUrl}}/contracts/1

@@ -106,7 +106,7 @@ export type Employee = {
   email?: string | null;
   phone?: string | null;
   employment_status?: string | null;
-  commision_split_percent?: number | null;
+  commission_split_percent?: number | null;
   role?: string | null;
   airtable_id?: string | null;
   office_id?: number | null;
@@ -116,7 +116,7 @@ export type DataSource = {
   data_source?: string | null;
   provider?: string | null;
   date_uploaded?: string | null;
-  number_of_leads?: string | null;
+  number_of_leads?: number | null;
   airtable_id?: string | null;
 }
 
@@ -133,7 +133,7 @@ export type Lender = {
 }
 
 export type ConditionalGuideline = {
-  guidline?: string | null;
+  guideline?: string | null;
   conditional_state?: string | null;
   conditional_entity_type?: string | null;
   conditional_revenue?: number | null;
@@ -152,7 +152,7 @@ export type Package = {
   centrex_id?: string | null;
   drive_folder_id?: string | null;
   airtable_id?: string | null;
-  business_id?: string | null;
+  business_id?: number | null;
   owner_id?: number | null;
   co_owner_id?: number | null;
   owner_ownership_percent?: number | null;
@@ -184,7 +184,7 @@ export type Offer = {
   buy_rate?: number | null;
   sell_rate?: number | null;
   airtable_id?: string | null;
-  submission_id?: string | null;
+  submission_id?: number | null;
 }
 
 export type Contract = {
@@ -201,14 +201,14 @@ export type Contract = {
 export type Funding = {
   date_funded?: string | null;
   points?: number | null;
-  commission_status?: number | null;
+  commission_status?: string | null;
   date_lender_paid?: string | null;
   airtable_id?: string | null;
-  offer_id?: string | null;
+  offer_id?: number | null;
 }
 
-export type Assignments = {
+export type Assignment = {
   employee_id?: number | null;
   deal_id?: number | null;
-  deal_role?: number | null;
+  deal_role?: string | null;
 }

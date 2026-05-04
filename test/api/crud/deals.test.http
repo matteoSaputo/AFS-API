@@ -1,0 +1,20 @@
+POST {{baseUrl}}/deals
+Content-Type: application/json
+
+{
+    "date_processed": "04/29/2025",
+    "package_id": 3
+}
+###
+GET {{baseUrl}}/deals/1
+###
+PATCH {{baseUrl}}/deals/1
+Content-Type: application/json
+
+{
+    "stage": "Offers"
+}
+###
+GET {{baseUrl}}/deals
+###
+DELETE {{baseUrl}}/deals/1 HTTP/1.1

@@ -1,23 +1,22 @@
 import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud"
 import { Router } from "../db/routers"
-import { Employee, Env } from "../utils/types"
+import { Offer, Env } from "../utils/types"
 
-const tableName = "employees"
-const allowedFields: (keyof Employee)[] = [
-    "name",
-    "email",
-    "phone",
-    "employment_status",
-    "commission_split_percent",
-    "role",
-    "airtable_id",
-    "office_id"
+const tableName = "offers"
+const allowedFields: (keyof Offer)[] = [
+    "amount",
+    "payment_cycles",
+    "payment_frequency",
+    "buy_rate",
+    "sell_rate",
+    "submission_id", 
+    "airtable_id"
 ]
-const requiredFields: (keyof Employee)[] = [
-    "name"
+const requiredFields: (keyof Offer)[] = [
+    "submission_id"
 ]
 
-export async function employeeRouter(
+export async function offerRouter(
     request: Request,
     env: Env
 ): Promise<Response> {
@@ -25,19 +24,19 @@ export async function employeeRouter(
         request,
         env,
         {
-            path: "employees",
+            path: "offers",
             method_functions: {
-                create: createEmployee,
-                read: getEmployeeById,
-                update: patchEmployeeById,
-                delete: deleteEmployeeById,
-                list: listEmployees
+                list: listOffers,
+                create: createOffer,
+                read: getOfferById,
+                update: patchOfferById,
+                delete: deleteOfferById
             }
         }
     )
 }
 
-async function listEmployees(
+async function listOffers(
     request: Request,
     env: Env
 ): Promise<Response> {
@@ -51,22 +50,22 @@ async function listEmployees(
     )
 }
 
-async function createEmployee(
+async function createOffer(
     request: Request,
-    env: Env
+    env: Env,
 ): Promise<Response> {
-    return createRecord<Employee>(
-        request, 
+    return createRecord<Offer>(
+        request,
         env,
         {
             table: tableName,
             allowedFields: allowedFields,
             requiredFields: requiredFields
         }
-    )
+    );
 }
 
-async function getEmployeeById(
+async function getOfferById(
     request: Request,
     env: Env
 ): Promise<Response> {
@@ -75,44 +74,45 @@ async function getEmployeeById(
         env,
         {
             table: tableName,
-            notFoundMessage: "Employee to read Not Found"
+            notFoundMessage: "Offer to read Not Found"
         }
     )
 }
 
-async function patchEmployeeById(
+async function patchOfferById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return patchRecordById<Employee>(
+    return patchRecordById<Offer>(
         request,
         env,
         {
             table: tableName,
             allowedFields: allowedFields,
-            notFoundMessage: "Employee to update Not Found"
+            notFoundMessage: "Offer to update Not Found"
         }
     )
 }
 
-async function deleteEmployeeById(
-    request: Request,
-    env: Env
+async function deleteOfferById(
+    request: Request, 
+    env: Env,
 ): Promise<Response> {
     return deleteRecordById(
         request,
         env,
         {
             table: tableName,
-            notFoundMessage: "Employee to delete Not Found"
+            notFoundMessage: "Offer to delete Not Found"
         }
     )
 }
 
 export {
-    listEmployees,
-    createEmployee,
-    getEmployeeById,
-    patchEmployeeById,
-    deleteEmployeeById
+    listOffers,
+    createOffer,
+    getOfferById,
+    patchOfferById,
+    deleteOfferById
 }
+

@@ -20,7 +20,7 @@ GET {{baseUrl}}/businesses?industry_id=1
 ###
 GET {{baseUrl}}/businesses?city=New York
 ###
-PATCH {{baseUrl}}/businesses/4
+PATCH {{baseUrl}}/businesses/1
 Content-Type: application/json
 
 {

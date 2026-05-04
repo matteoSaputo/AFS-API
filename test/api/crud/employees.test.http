@@ -1,0 +1,19 @@
+POST {{baseUrl}}/employees
+Content-Type: application/json
+
+{
+    "name": "Imani Stewart"
+}
+###
+GET {{baseUrl}}/employees/1
+###
+PATCH {{baseUrl}}/employees/1
+Content-Type: application/json
+
+{
+    "email": "imani@afs.com"
+}
+###
+GET {{baseUrl}}/employees
+###
+DELETE {{baseUrl}}/employees/1

@@ -1,10 +1,10 @@
 import { fail } from "../utils/response";
 import { RouterConfig } from "../utils/types";
 
-export async function Router<T extends Record<string, any>>(
+export async function Router(
     request: Request,
     env: Env,
-    config: RouterConfig<T>
+    config: RouterConfig
 ) : Promise<Response> {
     const url = new URL(request.url);
     const pathname = url.pathname;

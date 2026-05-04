@@ -1,0 +1,20 @@
+POST {{baseUrl}}/packages
+Content-Type: application/json
+
+{
+    "date_received": "2026-4-28",
+    "business_id": 1
+}
+###
+GET {{baseUrl}}/packages
+###
+PATCH {{baseUrl}}/packages/1
+Content-Type: application/json
+
+{
+    "centrex_id": "1234"
+}
+###
+GET {{baseUrl}}/packages/1
+###
+DELETE {{baseUrl}}/packages/2

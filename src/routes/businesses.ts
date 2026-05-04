@@ -54,7 +54,8 @@ async function listBusinesses(
         request,
         env,
         {
-            table: tableName
+            table: tableName,
+            orderBy: "id desc"
         }
     );
 }
@@ -115,4 +116,12 @@ async function deleteBusinessById(
             notFoundMessage: "Business to delete Not Found"
         }
     )
+}
+
+export {
+    listBusinesses, 
+    createBusiness,
+    getBusinessById,
+    patchBusinessById,
+    deleteBusinessById
 }

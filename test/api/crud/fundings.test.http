@@ -1,0 +1,20 @@
+POST {{baseUrl}}/fundings
+Content-Type: application/json
+
+{
+    "date_funded": "5/4/2026",
+    "offer_id": 3
+}
+###
+GET {{baseUrl}}/fundings/1
+###
+PATCH {{baseUrl}}/fundings/1
+Content-Type: application/json
+
+{
+    "points": 12
+}
+###
+GET {{baseUrl}}/fundings
+###
+DELETE {{baseUrl}}/fundings/1
