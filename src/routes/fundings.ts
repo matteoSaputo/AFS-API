@@ -1,17 +1,21 @@
 import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud"
 import { Router } from "../db/routers"
-import { Industry, Env } from "../utils/types"
+import { Funding, Env } from "../utils/types"
 
-const tableName = "industries"
-const allowedFields: (keyof Industry)[] = [
-    "industry", 
+const tableName = "fundings"
+const allowedFields: (keyof Funding)[] = [
+    "date_funded",
+    "points",
+    "commission_status",
+    "date_lender_paid",
+    "offer_id",
     "airtable_id"
 ]
-const requiredFields: (keyof Industry)[] = [
-    "industry"
+const requiredFields: (keyof Funding)[] = [
+    "offer_id"
 ]
 
-export async function industryRouter(
+export async function fundingRouter(
     request: Request,
     env: Env
 ): Promise<Response> {
@@ -19,19 +23,19 @@ export async function industryRouter(
         request,
         env,
         {
-            path: "industries",
+            path: "fundings",
             method_functions: {
-                list: listIndustries,
-                create: createIndustry,
-                read: getIndustryById,
-                update: patchIndustryById,
-                delete: deleteIndustryById
+                list: listFundings,
+                create: createFunding,
+                read: getFundingById,
+                update: patchFundingById,
+                delete: deleteFundingById
             }
         }
     )
 }
 
-async function listIndustries(
+async function listFundings(
     request: Request,
     env: Env
 ): Promise<Response> {
@@ -45,11 +49,11 @@ async function listIndustries(
     )
 }
 
-async function createIndustry(
+async function createFunding(
     request: Request,
     env: Env,
 ): Promise<Response> {
-    return createRecord<Industry>(
+    return createRecord<Funding>(
         request,
         env,
         {
@@ -60,7 +64,7 @@ async function createIndustry(
     );
 }
 
-async function getIndustryById(
+async function getFundingById(
     request: Request,
     env: Env
 ): Promise<Response> {
@@ -69,27 +73,27 @@ async function getIndustryById(
         env,
         {
             table: tableName,
-            notFoundMessage: "Industry to read Not Found"
+            notFoundMessage: "Funding to read Not Found"
         }
     )
 }
 
-async function patchIndustryById(
+async function patchFundingById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return patchRecordById<Industry>(
+    return patchRecordById<Funding>(
         request,
         env,
         {
             table: tableName,
             allowedFields: allowedFields,
-            notFoundMessage: "Industry to update Not Found"
+            notFoundMessage: "Funding to update Not Found"
         }
     )
 }
 
-async function deleteIndustryById(
+async function deleteFundingById(
     request: Request, 
     env: Env,
 ): Promise<Response> {
@@ -98,16 +102,16 @@ async function deleteIndustryById(
         env,
         {
             table: tableName,
-            notFoundMessage: "Industry to delete Not Found"
+            notFoundMessage: "Funding to delete Not Found"
         }
     )
 }
 
 export {
-    listIndustries,
-    createIndustry,
-    getIndustryById,
-    patchIndustryById,
-    deleteIndustryById
+    listFundings,
+    createFunding,
+    getFundingById,
+    patchFundingById,
+    deleteFundingById
 }
 

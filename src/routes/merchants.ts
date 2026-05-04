@@ -1,9 +1,9 @@
-import type { Env, MerchantBody } from "../utils/types";
-import { fail } from "../utils/response";
-import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud";
+import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud"
+import { Router } from "../db/routers"
+import { Merchant, Env } from "../utils/types"
 
 const tableName = "merchants";
-const allowedFields: (keyof MerchantBody)[] = [
+const allowedFields: (keyof Merchant)[] = [
     "name",
     "ssn",
     "date_of_birth",
@@ -16,7 +16,7 @@ const allowedFields: (keyof MerchantBody)[] = [
     "credit_score",
     "bad_history",
 ];
-const requiredFields: (keyof MerchantBody)[] = [
+const requiredFields: (keyof Merchant)[] = [
     "name",
 ];
 
@@ -24,66 +24,32 @@ export async function merchantRouter(
     request: Request,
     env: Env
 ): Promise<Response> {
-    const url = new URL(request.url);
-    const pathname = url.pathname
-    const method = request.method
-
-    // === CREATE/POST ===
-    if(method === "POST"){
-        return createMerchant(request, env);
-    }
-
-    // === READ/GET ===
-    if (method === "GET" ) {
-        if(/^\/merchants\/\d+$/.test(pathname)){
-            return getMerchantById(request, env);
-        }
-
-        return listMerchants(request, env);
-    }
-
-    // === UPDATE/PATCH ===
-    if (method === "PATCH") {
-        if(/^\/merchants\/\d+$/.test(pathname)){
-            return patchMerchantById(request, env)
-        }
-    }
-
-    // === DELETE ===
-    if (method === "DELETE") {
-        if(/^\/merchants\/\d+$/.test(pathname)){
-            return deleteMerchantById(request, env)
-        }
-    }
-
-    return fail("Method or Endpoint Not Found", 404)
-}
-
-async function deleteMerchantById(
-    request: Request,
-    env: Env
-): Promise<Response> {
-    return deleteRecordById(
-        request, 
+    return Router(
+        request,
         env,
         {
-            table: tableName,
-            notFoundMessage: "Merchant to delete Not Found"
+            path: "merchants",
+            method_functions: {
+                list: listMerchants,                
+                create: createMerchant,
+                read: getMerchantById,
+                update: patchMerchantById,
+                delete: deleteMerchantById
+            }
         }
-    );
+    )
 }
 
-async function patchMerchantById(
+async function listMerchants(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return patchRecordById(
+    return listRecords(
         request,
         env,
         {
             table: tableName,
-            allowedFields: allowedFields,
-            notFoundMessage: "Merchant to update Not Found",
+            orderBy: "id desc"
         }
     );
 }
@@ -92,7 +58,7 @@ async function createMerchant(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return createRecord(
+    return createRecord<Merchant>(
         request,
         env,
         {
@@ -117,15 +83,40 @@ async function getMerchantById(
     );
 }
 
-async function listMerchants(
+async function patchMerchantById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return listRecords(
+    return patchRecordById<Merchant>(
         request,
         env,
         {
             table: tableName,
+            allowedFields: allowedFields,
+            notFoundMessage: "Merchant to update Not Found",
         }
     );
+}
+
+
+async function deleteMerchantById(
+    request: Request,
+    env: Env
+): Promise<Response> {
+    return deleteRecordById(
+        request, 
+        env,
+        {
+            table: tableName,
+            notFoundMessage: "Merchant to delete Not Found"
+        }
+    );
+}
+
+export {
+    listMerchants,
+    createMerchant,
+    getMerchantById,
+    patchMerchantById,
+    deleteMerchantById
 }

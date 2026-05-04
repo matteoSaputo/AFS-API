@@ -1,0 +1,21 @@
+POST {{baseUrl}}/offers
+Content-Type: application/json
+
+{
+    "amount": 80000,
+    "submission_id": 2
+}
+###
+GET {{baseUrl}}/offers/2
+###
+PATCH {{baseUrl}}/offers/2
+Content-Type: application/json
+
+{
+    "payment_cycles": 32,
+    "payment_frequency": "Weekly"
+}
+###
+GET {{baseUrl}}/offers
+###
+DELETE {{baseUrl}}/offers/2

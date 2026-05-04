@@ -15,7 +15,7 @@ PATCH {{baseUrl}}/industries/2
 Content-Type: application/json
 
 {
-    "airtable_id": 1234
+    "airtable_id": null
 }
 ###
-DELETE {{baseUrl}}/industries/4 HTTP/1.1
+DELETE {{baseUrl}}/industries/5 HTTP/1.1

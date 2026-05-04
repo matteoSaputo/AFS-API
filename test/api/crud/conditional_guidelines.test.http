@@ -1,0 +1,19 @@
+POST {{baseUrl}}/conditional_guidelines
+Content-Type: application/json
+
+{
+    "guideline": "Restricted"
+}
+###
+GET {{baseUrl}}/conditional_guidelines
+###
+PATCH {{baseUrl}}/conditional_guidelines/1
+Content-Type: application/json
+
+{
+    "conditional_state": "NY"
+}
+###
+GET {{baseUrl}}/conditional_guidelines/1
+###
+DELETE {{baseUrl}}/conditional_guidelines/1

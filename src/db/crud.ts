@@ -42,8 +42,13 @@ export async function getRecordById(
     env: Env,
     options: GetByIdOptions
 ): Promise<Response> {
-    const url = new URL(request.url);
-    const id = url.pathname.split("/")[2];
+    let id: string;
+    if(options.id){
+        id = String(options.id)
+    }else{
+        const url = new URL(request.url);
+        id = url.pathname.split("/")[2];
+    }   
 
     const client = makeClient(env);
 
@@ -76,34 +81,37 @@ export async function createRecord<T extends Record<string, any>>(
     env: Env,
     options: CreateOptions<T>,
 ): Promise<Response> {
-    if(!options.body){
+    let body: T
+    if(options.body){
+        body = options.body
+    }else{
         try {
-            options.body = await request.json<T>();
+            body = await request.json<T>();
         } catch {
             return fail("Invalid JSON body", 400)
-        } 
+        }    
     }
     
-    const validationError = options.validator?.(options.body);
+    const validationError = options.validator?.(body);
     if(validationError){
         return fail(validationError, 400)
     }
 
     if(options.requiredFields){
         for(const field of options.requiredFields){
-            if([undefined, null, ""].includes(options.body[field])){
+            if([undefined, null, ""].includes(body[field])){
                 return fail(`${String(field)} is required`, 400)
             }
         }
     }
 
-    const entries = Object.entries(options.body).filter(
+    const entries = Object.entries(body).filter(
         ([key, value]) => 
             options.allowedFields.includes(key as keyof T) && value !== undefined
     )
 
     if(entries.length === 0){
-        return fail("No valid fields provided");
+        return fail("No valid fields provided", 400);
     }
 
     const columns = entries.map(
@@ -147,29 +155,37 @@ export async function patchRecordById<T extends Record<string, any>>(
     env: Env,
     options: PatchOptions<T>,
 ): Promise<Response> {
-    const url = new URL(request.url)
-    const id = url.pathname.split("/")[2];
+    let id: string;
+    if(options.id){
+        id = String(options.id)
+    }else{
+        const url = new URL(request.url);
+        id = url.pathname.split("/")[2];
+    }   
 
-    if(!options.body){
+    let body: T
+    if(options.body){
+        body = options.body
+    }else{
         try {
-            options.body = await request.json<T>();
+            body = await request.json<T>();
         } catch {
             return fail("Invalid JSON body", 400)
-        } 
+        }    
     }
     
-    const validationError = options.validator?.(options.body);
+    const validationError = options.validator?.(body);
     if(validationError){
         return fail(validationError, 400)
     }
 
-    const entries = Object.entries(options.body).filter(
+    const entries = Object.entries(body).filter(
         ([key, value]) => 
             options.allowedFields.includes(key as keyof T) && value !== undefined
     )
 
     if(entries.length === 0){
-        return fail("No valid fields provided for update");
+        return fail("No valid fields provided for update", 400);
     }
 
     const setClauses = entries.map(
@@ -209,8 +225,13 @@ export async function deleteRecordById(
     env: Env,
     options: DeleteOptions
 ): Promise<Response> {
-    const url = new URL(request.url);
-    const id = url.pathname.split("/")[2];
+    let id: string;
+    if(options.id){
+        id = String(options.id)
+    }else{
+        const url = new URL(request.url);
+        id = url.pathname.split("/")[2];
+    }   
 
     const client = makeClient(env);
 

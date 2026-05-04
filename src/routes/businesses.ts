@@ -1,9 +1,9 @@
-import type { BusinessBody, Env } from "../utils/types";
-import { fail } from "../utils/response";
-import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud";
+import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud"
+import { Router } from "../db/routers"
+import { Business, Env } from "../utils/types"
 
 const tableName = "businesses"
-const allowedFields: (keyof BusinessBody)[] = [
+const allowedFields: (keyof Business)[] = [
     "business_legal_name",
     "ein",
     "industry_id",
@@ -21,7 +21,7 @@ const allowedFields: (keyof BusinessBody)[] = [
     "description",
     "airtable_id"
 ]
-const requiredFields: (keyof BusinessBody)[] = [
+const requiredFields: (keyof Business)[] = [
     "business_legal_name",
     "ein",
 ]
@@ -30,68 +30,49 @@ export async function businessRouter(
     request: Request,
     env: Env
 ): Promise<Response> {
-    const url = new URL(request.url);
-    const pathname = url.pathname
-    const method = request.method
-
-    // === CREATE/POST ===
-    if(method === "POST"){
-        return createBusiness(request, env);
-    }
-
-    // === READ/GET ===
-    if (method === "GET" ) {
-        if(/^\/businesses\/\d+$/.test(pathname)){
-            return getBusinessById(request, env);
-        }
-
-        return listBusinesses(request, env);
-    }
-
-    // === UPDATE/PATCH ===
-    if (method === "PATCH") {
-        if(/^\/businesses\/\d+$/.test(pathname)){
-            return patchBusinessById(request, env)
-        }
-    }
-    
-    // === DELETE ===
-    if (method === "DELETE") {
-        if(/^\/businesses\/\d+$/.test(pathname)){
-            return deleteBusinessById(request, env)
-        }
-    }
-
-    return fail("Method or Endpoint Not Found", 404)
-}
-
-async function deleteBusinessById(
-    request: Request, 
-    env: Env
-): Promise<Response> {
-    return deleteRecordById(
-        request,
+    return Router(
+        request, 
         env,
         {
-            table: tableName,
-            notFoundMessage: "Business to delete Not Found"
+            path: "businesses",
+            method_functions: {
+                list: listBusinesses,
+                create: createBusiness,
+                read: getBusinessById,
+                update: patchBusinessById,
+                delete: deleteBusinessById
+            }
         }
     )
 }
 
-async function patchBusinessById(
+async function listBusinesses(
     request: Request, 
     env: Env
 ): Promise<Response> {
-    return patchRecordById(
+    return listRecords(
+        request,
+        env,
+        {
+            table: tableName,
+            orderBy: "id desc"
+        }
+    );
+}
+
+async function createBusiness(
+    request: Request, 
+    env: Env
+): Promise<Response> {
+    return createRecord<Business>(
         request,
         env,
         {
             table: tableName,
             allowedFields: allowedFields,
-            notFoundMessage: "Business to update Not Found"
+            requiredFields: requiredFields
         }
-    );
+    )
 }
 
 async function getBusinessById(
@@ -108,29 +89,39 @@ async function getBusinessById(
     );
 }
 
-async function listBusinesses(
+async function patchBusinessById(
     request: Request, 
     env: Env
 ): Promise<Response> {
-    return listRecords(
-        request,
-        env,
-        {
-            table: tableName
-        }
-    );
-}
-
-async function createBusiness(
-    request: Request, 
-    env: Env
-): Promise<Response> {
-    return createRecord(
+    return patchRecordById<Business>(
         request,
         env,
         {
             table: tableName,
-            allowedFields: allowedFields
+            allowedFields: allowedFields,
+            notFoundMessage: "Business to update Not Found"
+        }
+    );
+}
+
+async function deleteBusinessById(
+    request: Request, 
+    env: Env
+): Promise<Response> {
+    return deleteRecordById(
+        request,
+        env,
+        {
+            table: tableName,
+            notFoundMessage: "Business to delete Not Found"
         }
     )
+}
+
+export {
+    listBusinesses, 
+    createBusiness,
+    getBusinessById,
+    patchBusinessById,
+    deleteBusinessById
 }

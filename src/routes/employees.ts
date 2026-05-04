@@ -1,17 +1,23 @@
 import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud"
 import { Router } from "../db/routers"
-import { Industry, Env } from "../utils/types"
+import { Employee, Env } from "../utils/types"
 
-const tableName = "industries"
-const allowedFields: (keyof Industry)[] = [
-    "industry", 
-    "airtable_id"
+const tableName = "employees"
+const allowedFields: (keyof Employee)[] = [
+    "name",
+    "email",
+    "phone",
+    "employment_status",
+    "commission_split_percent",
+    "role",
+    "airtable_id",
+    "office_id"
 ]
-const requiredFields: (keyof Industry)[] = [
-    "industry"
+const requiredFields: (keyof Employee)[] = [
+    "name"
 ]
 
-export async function industryRouter(
+export async function employeeRouter(
     request: Request,
     env: Env
 ): Promise<Response> {
@@ -19,19 +25,19 @@ export async function industryRouter(
         request,
         env,
         {
-            path: "industries",
+            path: "employees",
             method_functions: {
-                list: listIndustries,
-                create: createIndustry,
-                read: getIndustryById,
-                update: patchIndustryById,
-                delete: deleteIndustryById
+                create: createEmployee,
+                read: getEmployeeById,
+                update: patchEmployeeById,
+                delete: deleteEmployeeById,
+                list: listEmployees
             }
         }
     )
 }
 
-async function listIndustries(
+async function listEmployees(
     request: Request,
     env: Env
 ): Promise<Response> {
@@ -45,22 +51,22 @@ async function listIndustries(
     )
 }
 
-async function createIndustry(
+async function createEmployee(
     request: Request,
-    env: Env,
+    env: Env
 ): Promise<Response> {
-    return createRecord<Industry>(
-        request,
+    return createRecord<Employee>(
+        request, 
         env,
         {
             table: tableName,
             allowedFields: allowedFields,
             requiredFields: requiredFields
         }
-    );
+    )
 }
 
-async function getIndustryById(
+async function getEmployeeById(
     request: Request,
     env: Env
 ): Promise<Response> {
@@ -69,45 +75,44 @@ async function getIndustryById(
         env,
         {
             table: tableName,
-            notFoundMessage: "Industry to read Not Found"
+            notFoundMessage: "Employee to read Not Found"
         }
     )
 }
 
-async function patchIndustryById(
+async function patchEmployeeById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return patchRecordById<Industry>(
+    return patchRecordById<Employee>(
         request,
         env,
         {
             table: tableName,
             allowedFields: allowedFields,
-            notFoundMessage: "Industry to update Not Found"
+            notFoundMessage: "Employee to update Not Found"
         }
     )
 }
 
-async function deleteIndustryById(
-    request: Request, 
-    env: Env,
+async function deleteEmployeeById(
+    request: Request,
+    env: Env
 ): Promise<Response> {
     return deleteRecordById(
         request,
         env,
         {
             table: tableName,
-            notFoundMessage: "Industry to delete Not Found"
+            notFoundMessage: "Employee to delete Not Found"
         }
     )
 }
 
 export {
-    listIndustries,
-    createIndustry,
-    getIndustryById,
-    patchIndustryById,
-    deleteIndustryById
+    listEmployees,
+    createEmployee,
+    getEmployeeById,
+    patchEmployeeById,
+    deleteEmployeeById
 }
-

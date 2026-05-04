@@ -1,0 +1,17 @@
+POST {{baseUrl}}/data_sources
+Content-Type: application/json
+
+{
+    "data_source": "DK40"
+}
+###
+GET {{baseUrl}}/data_sources
+###
+PATCH {{baseUrl}}/data_sources/1
+Content-Type: application/json
+
+{
+    "provider": "Data King"
+}
+###
+DELETE {{baseUrl}}/data_sources/1

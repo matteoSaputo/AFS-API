@@ -1,17 +1,22 @@
 import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud"
 import { Router } from "../db/routers"
-import { Industry, Env } from "../utils/types"
+import { Submission, Env } from "../utils/types"
 
-const tableName = "industries"
-const allowedFields: (keyof Industry)[] = [
-    "industry", 
-    "airtable_id"
+const tableName = "submissions"
+const allowedFields: (keyof Submission)[] = [
+    "date_submitted",
+    "result",
+    "feedback", 
+    "airtable_id",
+    "deal_id",
+    "lender_id"
 ]
-const requiredFields: (keyof Industry)[] = [
-    "industry"
+const requiredFields: (keyof Submission)[] = [
+    "deal_id",
+    "lender_id"
 ]
 
-export async function industryRouter(
+export async function submissionRouter(
     request: Request,
     env: Env
 ): Promise<Response> {
@@ -19,19 +24,19 @@ export async function industryRouter(
         request,
         env,
         {
-            path: "industries",
+            path: "submissions",
             method_functions: {
-                list: listIndustries,
-                create: createIndustry,
-                read: getIndustryById,
-                update: patchIndustryById,
-                delete: deleteIndustryById
+                list: listSubmissions,
+                create: createSubmission,
+                read: getSubmissionById,
+                update: patchSubmissionById,
+                delete: deleteSubmissionById
             }
         }
     )
 }
 
-async function listIndustries(
+async function listSubmissions(
     request: Request,
     env: Env
 ): Promise<Response> {
@@ -45,11 +50,11 @@ async function listIndustries(
     )
 }
 
-async function createIndustry(
+async function createSubmission(
     request: Request,
     env: Env,
 ): Promise<Response> {
-    return createRecord<Industry>(
+    return createRecord<Submission>(
         request,
         env,
         {
@@ -60,7 +65,7 @@ async function createIndustry(
     );
 }
 
-async function getIndustryById(
+async function getSubmissionById(
     request: Request,
     env: Env
 ): Promise<Response> {
@@ -69,27 +74,27 @@ async function getIndustryById(
         env,
         {
             table: tableName,
-            notFoundMessage: "Industry to read Not Found"
+            notFoundMessage: "Submission to read Not Found"
         }
     )
 }
 
-async function patchIndustryById(
+async function patchSubmissionById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return patchRecordById<Industry>(
+    return patchRecordById<Submission>(
         request,
         env,
         {
             table: tableName,
             allowedFields: allowedFields,
-            notFoundMessage: "Industry to update Not Found"
+            notFoundMessage: "Submission to update Not Found"
         }
     )
 }
 
-async function deleteIndustryById(
+async function deleteSubmissionById(
     request: Request, 
     env: Env,
 ): Promise<Response> {
@@ -98,16 +103,16 @@ async function deleteIndustryById(
         env,
         {
             table: tableName,
-            notFoundMessage: "Industry to delete Not Found"
+            notFoundMessage: "Submission to delete Not Found"
         }
     )
 }
 
 export {
-    listIndustries,
-    createIndustry,
-    getIndustryById,
-    patchIndustryById,
-    deleteIndustryById
+    listSubmissions,
+    createSubmission,
+    getSubmissionById,
+    patchSubmissionById,
+    deleteSubmissionById
 }
 
