@@ -1,5 +1,6 @@
 POST {{baseUrl}}/deals
 Content-Type: application/json
+api-key: {{apiKey}}
 
 {
     "date_processed": "04/29/2025",
@@ -7,14 +8,18 @@ Content-Type: application/json
 }
 ###
 GET {{baseUrl}}/deals/1
+api-key: {{apiKey}}
 ###
 PATCH {{baseUrl}}/deals/1
 Content-Type: application/json
+api-key: {{apiKey}}
 
 {
     "stage": "Offers"
 }
 ###
 GET {{baseUrl}}/deals
+api-key: {{apiKey}}
 ###
 DELETE {{baseUrl}}/deals/1 HTTP/1.1
+api-key: {{apiKey}}

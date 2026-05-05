@@ -1,17 +1,21 @@
 POST {{baseUrl}}/data_sources
 Content-Type: application/json
+api-key: {{apiKey}}
 
 {
     "data_source": "DK40"
 }
 ###
 GET {{baseUrl}}/data_sources
+api-key: {{apiKey}}
 ###
 PATCH {{baseUrl}}/data_sources/1
 Content-Type: application/json
+api-key: {{apiKey}}
 
 {
     "provider": "Data King"
 }
 ###
 DELETE {{baseUrl}}/data_sources/1
+api-key: {{apiKey}}

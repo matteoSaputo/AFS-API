@@ -1,8 +1,10 @@
 ###
 GET {{baseUrl}}/businesses
+api-key: {{apiKey}}
 ###
 POST {{baseUrl}}/businesses
 Content-Type: application/json
+api-key: {{apiKey}}
 
 {
   "business_legal_name": "4th Test Corp",
@@ -12,16 +14,9 @@ Content-Type: application/json
   "state": "TX"
 }
 ###
-GET {{baseUrl}}/businesses/4
-###
-GET {{baseUrl}}/businesses?state=NY
-###
-GET {{baseUrl}}/businesses?industry_id=1
-###
-GET {{baseUrl}}/businesses?city=New York
-###
 PATCH {{baseUrl}}/businesses/1
 Content-Type: application/json
+api-key: {{apiKey}}
 
 {
   "city": "Pheonix",

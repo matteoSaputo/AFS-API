@@ -1,5 +1,6 @@
 POST {{baseUrl}}/packages
 Content-Type: application/json
+api-key: {{apiKey}}
 
 {
     "date_received": "2026-4-28",
@@ -7,14 +8,18 @@ Content-Type: application/json
 }
 ###
 GET {{baseUrl}}/packages
+api-key: {{apiKey}}
 ###
 PATCH {{baseUrl}}/packages/1
 Content-Type: application/json
+api-key: {{apiKey}}
 
 {
     "centrex_id": "1234"
 }
 ###
 GET {{baseUrl}}/packages/1
+api-key: {{apiKey}}
 ###
 DELETE {{baseUrl}}/packages/2
+api-key: {{apiKey}}
