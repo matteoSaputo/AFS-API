@@ -1,19 +1,24 @@
 POST {{baseUrl}}/employees
 Content-Type: application/json
+api-key: {{apiKey}}
 
 {
     "name": "Imani Stewart"
 }
 ###
 GET {{baseUrl}}/employees/1
+api-key: {{apiKey}}
 ###
 PATCH {{baseUrl}}/employees/1
 Content-Type: application/json
+api-key: {{apiKey}}
 
 {
     "email": "imani@afs.com"
 }
 ###
 GET {{baseUrl}}/employees
+api-key: {{apiKey}}
 ###
 DELETE {{baseUrl}}/employees/1
+api-key: {{apiKey}}

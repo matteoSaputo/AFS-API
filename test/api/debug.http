@@ -1,5 +1,8 @@
 Get {{baseUrl}}/debug/ping
+api-key: {{apiKey}}
 ###
 Get {{baseUrl}}/debug/bindings
+api-key: {{apiKey}}
 ###
 Get {{baseUrl}}/debug/where
+api-key: {{apiKey}}

@@ -17,9 +17,14 @@ import { packageRouter } from "./routes/packages";
 import { submissionRouter } from "./routes/submissions";
 import { requireApiKey } from "./utils/auth";
 import { fail } from "./utils/response";
+import type { Env } from "./utils/types";
 
 export default {
-	async fetch(request, env, ctx): Promise<Response> {
+	async fetch(
+		request: Request, 
+		env: Env, 
+		ctx: ExecutionContext
+	): Promise<Response> {
 		const url = new URL(request.url);
 		const pathname = url.pathname;
 

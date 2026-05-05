@@ -1,5 +1,6 @@
 POST {{baseUrl}}/submissions
 Content-Type: application/json
+api-key: {{apiKey}}
 
 {
     "date_submitted": "05/04/2025",
@@ -8,14 +9,18 @@ Content-Type: application/json
 }
 ###
 GET {{baseUrl}}/submissions/1
+api-key: {{apiKey}}
 ###
 PATCH {{baseUrl}}/submissions/1
 Content-Type: application/json
+api-key: {{apiKey}}
 
 {
     "feedback": "low revenue"
 }
 ###
 GET {{baseUrl}}/submissions
+api-key: {{apiKey}}
 ###
 DELETE {{baseUrl}}/submissions/1
+api-key: {{apiKey}}

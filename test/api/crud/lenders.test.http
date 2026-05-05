@@ -1,5 +1,6 @@
 POST {{baseUrl}}/lenders
 Content-Type: application/json
+api-key: {{apiKey}}
 
 {
     "lender": "Everest",
@@ -7,15 +8,19 @@ Content-Type: application/json
 }
 ###
 GET {{baseUrl}}/lenders/1
+api-key: {{apiKey}}
 ###
 PATCH {{baseUrl}}/lenders/1
 Content-Type: application/json
+api-key: {{apiKey}}
 
 {
     "min_revenue": 3000
 }
 ###
 GET {{baseUrl}}/lenders
+api-key: {{apiKey}}
 ###
 DELETE {{baseUrl}}/lenders/1
+api-key: {{apiKey}}
 

@@ -1,5 +1,6 @@
 POST {{baseUrl}}/contracts
 Content-Type: application/json
+api-key: {{apiKey}}
 
 {
     "type": "LOC",
@@ -7,14 +8,18 @@ Content-Type: application/json
 }
 ###
 GET {{baseUrl}}/contracts/1
+api-key: {{apiKey}}
 ###
 PATCH {{baseUrl}}/contracts/1
 Content-Type: application/json
+api-key: {{apiKey}}
 
 {
     "funding_amount": 100000
 }
 ###
 GET {{baseUrl}}/contracts
+api-key: {{apiKey}}
 ###
 DELETE {{baseUrl}}/contracts/1
+api-key: {{apiKey}}

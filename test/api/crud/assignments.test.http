@@ -1,5 +1,6 @@
 POST {{baseUrl}}/assignments
 Content-Type: application/json
+api-key: {{apiKey}}
 
 {
     "deal_role": "Opener",
@@ -7,12 +8,18 @@ Content-Type: application/json
 }
 ###
 GET {{baseUrl}}/assignments/3
+api-key: {{apiKey}}
 ###
 PATCH {{baseUrl}}/assignments/3
 Content-Type: application/json
+api-key: {{apiKey}}
 
 {
     "employee_id": 2 
 }
 ###
+GET {{baseUrl}}/assignments
+api-key: {{apiKey}}
+###
 DELETE {{baseUrl}}/assignments/5
+api-key: {{apiKey}}

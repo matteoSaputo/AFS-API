@@ -1,18 +1,24 @@
 GET {{baseUrl}}/offices
+api-key: {{apiKey}}
 ###
 POST {{baseUrl}}/offices
 Content-Type: application/json
+api-key: {{apiKey}}
 
 {
     "location": "RXR"
 }
 ###
 PATCH {{baseUrl}}/offices/1
+Content-Type: application/json
+api-key: {{apiKey}}
 
 {
     "status": "open"
 }
 ###
 GET {{baseUrl}}/offices/2
+api-key: {{apiKey}}
 ###
 DELETE {{baseUrl}}/offices/2
+api-key: {{apiKey}}

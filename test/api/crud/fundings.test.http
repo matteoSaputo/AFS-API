@@ -1,5 +1,6 @@
 POST {{baseUrl}}/fundings
 Content-Type: application/json
+api-key: {{apiKey}}
 
 {
     "date_funded": "5/4/2026",
@@ -7,14 +8,18 @@ Content-Type: application/json
 }
 ###
 GET {{baseUrl}}/fundings/1
+api-key: {{apiKey}}
 ###
 PATCH {{baseUrl}}/fundings/1
 Content-Type: application/json
+api-key: {{apiKey}}
 
 {
     "points": 12
 }
 ###
 GET {{baseUrl}}/fundings
+api-key: {{apiKey}}
 ###
 DELETE {{baseUrl}}/fundings/1
+api-key: {{apiKey}}

@@ -1,7 +1,9 @@
 GET {{baseUrl}}/merchants HTTP/1.1
+api-key: {{apiKey}}
 ###
 POST {{baseUrl}}/merchants HTTP/1.1
 Content-Type: application/json
+api-key: {{apiKey}}
 
 {
     "name": "John Saitram",
@@ -11,6 +13,7 @@ Content-Type: application/json
 ###
 POST {{baseUrl}}/merchants HTTP/1.1
 Content-Type: application/json
+api-key: {{apiKey}}
 
 {
     "name": "Imani Stewart",
@@ -19,11 +22,15 @@ Content-Type: application/json
 }
 ###
 GET {{baseUrl}}/merchants/1 HTTP/1.1
+api-key: {{apiKey}}
 ###
 PATCH {{baseUrl}}/merchants/5
+Content-Type: application/json
+api-key: {{apiKey}}
 
 {
     "address": "123 main st"
 }
 ###
 DELETE {{baseUrl}}/merchants/6 HTTP/1.1
+api-key: {{apiKey}}
