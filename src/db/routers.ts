@@ -1,5 +1,6 @@
 import { fail } from "../utils/response";
 import { RouterConfig } from "../utils/types";
+import type { Env } from "../utils/types";
 
 export async function Router(
     request: Request,
