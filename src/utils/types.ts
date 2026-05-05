@@ -1,6 +1,7 @@
 // ================ DB ===================
 export interface Env {
   HYPERDRIVE: Hyperdrive;
+  API_KEY?: string;
 };
 
 // ================ Validator ==================

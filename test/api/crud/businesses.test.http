@@ -1,5 +1,6 @@
 ###
 GET {{baseUrl}}/businesses
+api-key: {{apiKey}}
 ###
 POST {{baseUrl}}/businesses
 Content-Type: application/json

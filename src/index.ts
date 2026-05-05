@@ -15,6 +15,7 @@ import { offerRouter } from "./routes/offers";
 import { officesRouter } from "./routes/offices";
 import { packageRouter } from "./routes/packages";
 import { submissionRouter } from "./routes/submissions";
+import { requireApiKey } from "./utils/auth";
 import { fail } from "./utils/response";
 
 export default {
@@ -34,6 +35,10 @@ export default {
 		if(pathname.startsWith("/health")) {
 			return healthRouter(request, env);
 		}
+
+		// Beloe Routes are protected by API KEY
+		const authError = requireApiKey(request, env);
+		if(authError) return authError
 
 		// ======== Debug ==========
 		if(pathname.startsWith("/debug")) {
