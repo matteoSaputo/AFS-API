@@ -1,5 +1,5 @@
 import { ok, fail } from "../utils/response";
-import { CreateOptions, DeleteOptions, GetByIdOptions, ListOptions, PatchOptions } from "../utils/types";
+import { CreateOptions, DeleteOptions, Env, GetByIdOptions, ListOptions, PatchOptions } from "../utils/types";
 import { makeClient } from "./client";
 
 export async function listRecords(

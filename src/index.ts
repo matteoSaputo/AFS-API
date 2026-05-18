@@ -1,20 +1,20 @@
-import { assignmentRouter } from "./routes/assignments";
-import { businessRouter } from "./routes/businesses";
-import { conditionalGuidelinesRouter } from "./routes/conditional_guidelines";
-import { contractRouter } from "./routes/contracts";
-import { dataSourceRouter } from "./routes/data_sources";
-import { dealRouter } from "./routes/deals";
-import { debugRouter } from "./routes/debug";
-import { employeeRouter } from "./routes/employees";
-import { fundingRouter } from "./routes/fundings";
-import { healthRouter } from "./routes/health";
-import { industryRouter } from "./routes/industries";
-import { lenderRouter } from "./routes/lenders";
-import { merchantRouter } from "./routes/merchants";
-import { offerRouter } from "./routes/offers";
-import { officesRouter } from "./routes/offices";
-import { packageRouter } from "./routes/packages";
-import { submissionRouter } from "./routes/submissions";
+import { assignmentRouter } from "./routes/core/assignments";
+import { businessRouter } from "./routes/core/businesses";
+import { conditionalGuidelinesRouter } from "./routes/core/conditional_guidelines";
+import { contractRouter } from "./routes/core/contracts";
+import { dataSourceRouter } from "./routes/core/data_sources";
+import { dealRouter } from "./routes/core/deals";
+import { debugRouter } from "./routes/db/debug";
+import { employeeRouter } from "./routes/core/employees";
+import { fundingRouter } from "./routes/core/fundings";
+import { healthRouter } from "./routes/db/health";
+import { industryRouter } from "./routes/core/industries";
+import { lenderRouter } from "./routes/core/lenders";
+import { merchantRouter } from "./routes/core/merchants";
+import { offerRouter } from "./routes/core/offers";
+import { officesRouter } from "./routes/core/offices";
+import { packageRouter } from "./routes/core/packages";
+import { submissionRouter } from "./routes/core/submissions";
 import { requireApiKey } from "./utils/auth";
 import { fail } from "./utils/response";
 import type { Env } from "./utils/types";
@@ -41,7 +41,7 @@ export default {
 			return healthRouter(request, env);
 		}
 
-		// Beloe Routes are protected by API KEY
+		// Below Routes are protected by API KEY
 		const authError = requireApiKey(request, env);
 		if(authError) return authError
 

@@ -1,4 +1,4 @@
-import { fail } from "../utils/response";
+import { fail } from "../../utils/response";
 
 
 export async function healthRouter(

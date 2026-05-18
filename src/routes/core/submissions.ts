@@ -1,6 +1,6 @@
-import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud"
-import { Router } from "../db/routers"
-import { Submission, Env } from "../utils/types"
+import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../../db/crud"
+import { Router } from "../../db/routers"
+import { Submission, Env } from "../../utils/types"
 
 const tableName = "submissions"
 const allowedFields: (keyof Submission)[] = [

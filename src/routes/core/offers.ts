@@ -1,21 +1,22 @@
-import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../db/crud"
-import { Router } from "../db/routers"
-import { Funding, Env } from "../utils/types"
+import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../../db/crud"
+import { Router } from "../../db/routers"
+import { Offer, Env } from "../../utils/types"
 
-const tableName = "fundings"
-const allowedFields: (keyof Funding)[] = [
-    "date_funded",
-    "points",
-    "commission_status",
-    "date_lender_paid",
-    "offer_id",
+const tableName = "offers"
+const allowedFields: (keyof Offer)[] = [
+    "amount",
+    "payment_cycles",
+    "payment_frequency",
+    "buy_rate",
+    "sell_rate",
+    "submission_id", 
     "airtable_id"
 ]
-const requiredFields: (keyof Funding)[] = [
-    "offer_id"
+const requiredFields: (keyof Offer)[] = [
+    "submission_id"
 ]
 
-export async function fundingRouter(
+export async function offerRouter(
     request: Request,
     env: Env
 ): Promise<Response> {
@@ -23,19 +24,19 @@ export async function fundingRouter(
         request,
         env,
         {
-            path: "fundings",
+            path: "offers",
             method_functions: {
-                list: listFundings,
-                create: createFunding,
-                read: getFundingById,
-                update: patchFundingById,
-                delete: deleteFundingById
+                list: listOffers,
+                create: createOffer,
+                read: getOfferById,
+                update: patchOfferById,
+                delete: deleteOfferById
             }
         }
     )
 }
 
-async function listFundings(
+async function listOffers(
     request: Request,
     env: Env
 ): Promise<Response> {
@@ -49,11 +50,11 @@ async function listFundings(
     )
 }
 
-async function createFunding(
+async function createOffer(
     request: Request,
     env: Env,
 ): Promise<Response> {
-    return createRecord<Funding>(
+    return createRecord<Offer>(
         request,
         env,
         {
@@ -64,7 +65,7 @@ async function createFunding(
     );
 }
 
-async function getFundingById(
+async function getOfferById(
     request: Request,
     env: Env
 ): Promise<Response> {
@@ -73,27 +74,27 @@ async function getFundingById(
         env,
         {
             table: tableName,
-            notFoundMessage: "Funding to read Not Found"
+            notFoundMessage: "Offer to read Not Found"
         }
     )
 }
 
-async function patchFundingById(
+async function patchOfferById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return patchRecordById<Funding>(
+    return patchRecordById<Offer>(
         request,
         env,
         {
             table: tableName,
             allowedFields: allowedFields,
-            notFoundMessage: "Funding to update Not Found"
+            notFoundMessage: "Offer to update Not Found"
         }
     )
 }
 
-async function deleteFundingById(
+async function deleteOfferById(
     request: Request, 
     env: Env,
 ): Promise<Response> {
@@ -102,16 +103,16 @@ async function deleteFundingById(
         env,
         {
             table: tableName,
-            notFoundMessage: "Funding to delete Not Found"
+            notFoundMessage: "Offer to delete Not Found"
         }
     )
 }
 
 export {
-    listFundings,
-    createFunding,
-    getFundingById,
-    patchFundingById,
-    deleteFundingById
+    listOffers,
+    createOffer,
+    getOfferById,
+    patchOfferById,
+    deleteOfferById
 }
 
