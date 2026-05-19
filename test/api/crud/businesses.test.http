@@ -7,7 +7,7 @@ Content-Type: application/json
 api-key: {{apiKey}}
 
 {
-  "business_legal_name": "4th Test Corp",
+  "business_legal_name": "6th Test Corp",
   "ein": "456895623",
   "industry_id": 1,
   "city": "Dallas",

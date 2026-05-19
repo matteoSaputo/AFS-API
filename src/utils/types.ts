@@ -2,13 +2,23 @@
 export interface Env {
   HYPERDRIVE: Hyperdrive;
   API_KEY: string;
+
+  DOCUSIGN_CLIENT_ID: string;
+  DOCUSIGN_USER_ID: string;
+  DOCUSIGN_PRIVATE_KEY: string;
+  DOCUSIGN_ACCOUNT_ID: string;
+  DOCUSIGN_BASE_URI: string;
+  DOCUSIGN_WEBHOOK_SECRET: string;
+
+  AIRTABLE_PAT: string;
+  AIRTABLE_BASE_ID: string;
 };
 
 // ================ Validator ==================
 export type Validator<T> = (body: T) => string | null
 
 // ================ Methods ==================
-export type CrudMethod = (request: Request, env: Env) => Promise<Response>
+export type ResponseMethod = (request: Request, env: Env) => Promise<Response>
 
 export type ListOptions = {
   table: string;
@@ -45,15 +55,21 @@ export type PatchOptions<T extends Record<string, any>> = {
 }
 
 // ================ Router Config =================
-export type RouterConfig = {
+export type RouterConfig<T extends Record<string, ResponseMethod>> = {
   path: string;
-  method_functions: {
-    create: CrudMethod,
-    read: CrudMethod,
-    update: CrudMethod,
-    delete: CrudMethod,
-    list: CrudMethod
-  }
+  methods: T 
+}
+
+export type Crud = {
+  create: ResponseMethod,
+  read: ResponseMethod,
+  update: ResponseMethod,
+  delete: ResponseMethod,
+  list: ResponseMethod
+}
+
+export type Webhook = {
+  handler: ResponseMethod
 }
 
 // ================ Request/Response Bodies ==================

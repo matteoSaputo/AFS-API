@@ -18,6 +18,7 @@ import { submissionRouter } from "./routes/core/submissions";
 import { requireApiKey } from "./utils/auth";
 import { fail } from "./utils/response";
 import type { Env } from "./utils/types";
+import { docusignCompletedRouter } from "./routes/webhooks/docusign_completed";
 
 export default {
 	async fetch(
@@ -40,6 +41,13 @@ export default {
 		if(pathname.startsWith("/health")) {
 			return healthRouter(request, env);
 		}
+		
+		// =============================
+		// Webhooks / Automations
+		// =============================
+		if(pathname.startsWith("/webhooks/docusign/completed_envelope")){
+			return docusignCompletedRouter(request, env)
+		}
 
 		// Below Routes are protected by API KEY
 		const authError = requireApiKey(request, env);
@@ -49,6 +57,10 @@ export default {
 		if(pathname.startsWith("/debug")) {
 			return debugRouter(request, env);
 		}
+
+		// =============================
+		// Core Models 
+		// =============================
 
 		// ======== Businesses ==========
 		if (pathname.startsWith("/businesses")) {
@@ -124,6 +136,8 @@ export default {
 		if(pathname.startsWith("/assignments")) {
 			return assignmentRouter(request, env);
 		}
+
+		
 
 		return fail(`Endpoint Not Found, URL: ${url}`);
 	},

@@ -1,0 +1,17 @@
+POST {{baseUrl}}/webhooks/docusign/completed_envelope?secret={{docusign_webhook_secret}}
+Content-Type: application/json
+
+{
+    "data": {
+        "envelopeId": "e67e09fa-a150-4f9f-b6d7-3765e80192a3"
+    }
+}
+###
+POST {{baseUrl}}/webhooks/docusign/completed_envelope?secret=wrong_ah_secret_123
+Content-Type: application/json
+
+{
+    "data": {
+        "envelopeId": "e67e09fa-a150-4f9f-b6d7-3765e80192a3"
+    }
+}
