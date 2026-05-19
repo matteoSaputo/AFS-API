@@ -1,5 +1,5 @@
 import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../../db/crud"
-import { Router } from "../../db/routers"
+import { crudRouter } from "../../db/routers"
 import { DataSource, Env } from "../../utils/types"
 
 const tableName = "data_sources"
@@ -18,12 +18,12 @@ export async function dataSourceRouter(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return Router(
+    return crudRouter(
         request,
         env,
         {
             path: "data_sources",
-            method_functions: {
+            methods: {
                 list: listDataSources,
                 create: createDataSource,
                 read: getDataSourceById,

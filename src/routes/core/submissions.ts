@@ -1,5 +1,5 @@
 import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../../db/crud"
-import { Router } from "../../db/routers"
+import { crudRouter } from "../../db/routers"
 import { Submission, Env } from "../../utils/types"
 
 const tableName = "submissions"
@@ -20,12 +20,12 @@ export async function submissionRouter(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return Router(
+    return crudRouter(
         request,
         env,
         {
             path: "submissions",
-            method_functions: {
+            methods: {
                 list: listSubmissions,
                 create: createSubmission,
                 read: getSubmissionById,

@@ -1,5 +1,5 @@
 import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../../db/crud"
-import { Router } from "../../db/routers"
+import { crudRouter } from "../../db/routers"
 import { Funding, Env } from "../../utils/types"
 
 const tableName = "fundings"
@@ -19,12 +19,12 @@ export async function fundingRouter(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return Router(
+    return crudRouter(
         request,
         env,
         {
             path: "fundings",
-            method_functions: {
+            methods: {
                 list: listFundings,
                 create: createFunding,
                 read: getFundingById,
