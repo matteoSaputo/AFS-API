@@ -57,7 +57,7 @@ export type PatchOptions<T extends Record<string, any>> = {
 // ================ Router Config =================
 export type RouterConfig<T extends Record<string, ResponseMethod>> = {
   path: string;
-  methods: T 
+  methods: T
 }
 
 export type Crud = {
@@ -70,6 +70,28 @@ export type Crud = {
 
 export type Webhook = {
   handler: ResponseMethod
+}
+
+// ================ Docusign ===================
+export interface DocusignRecipient {
+  recipientId: string;
+  name?: string;
+  email?: string;
+}
+
+export interface AllDocusignRecipients {
+  signers?: DocusignRecipient[];
+}
+
+export interface DocusignTabs {
+  textTabs?: any[];
+  emailTabs?: any[];
+  numberTabs?: any[];
+  ssnTabs?: any[];
+  dateTabs?: any[];
+  zipTabs?: any[];
+  phoneNumberTabs?: any[];
+  listTabs?: any[];
 }
 
 // ================ Request/Response Bodies ==================
@@ -173,7 +195,7 @@ export type Package = {
   owner_id?: number | null;
   co_owner_id?: number | null;
   owner_ownership_percent?: number | null;
-  co_owner_ownership_percent?: number | null;  
+  co_owner_ownership_percent?: number | null;
 }
 
 export type Deal = {

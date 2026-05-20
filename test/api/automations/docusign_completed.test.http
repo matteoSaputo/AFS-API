@@ -15,3 +15,6 @@ Content-Type: application/json
         "envelopeId": "e67e09fa-a150-4f9f-b6d7-3765e80192a3"
     }
 }
+###
+GET {{baseUrl}}/debug/docusign_private_key
+api-key: {{apiKey}}
