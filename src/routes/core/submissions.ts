@@ -1,4 +1,4 @@
-import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../../db/crud"
+import { httpCreateRecord, httpDeleteRecordById, httpGetRecordById, httpListRecords, httpPatchRecordById } from "../../db/crud"
 import { crudRouter } from "../../db/routers"
 import { Submission, Env } from "../../utils/types"
 
@@ -40,7 +40,7 @@ async function listSubmissions(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return listRecords(
+    return httpListRecords<Submission>(
         request,
         env,
         {
@@ -54,7 +54,7 @@ async function createSubmission(
     request: Request,
     env: Env,
 ): Promise<Response> {
-    return createRecord<Submission>(
+    return httpCreateRecord<Submission>(
         request,
         env,
         {
@@ -69,7 +69,7 @@ async function getSubmissionById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return getRecordById(
+    return httpGetRecordById<Submission>(
         request,
         env,
         {
@@ -83,7 +83,7 @@ async function patchSubmissionById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return patchRecordById<Submission>(
+    return httpPatchRecordById<Submission>(
         request,
         env,
         {
@@ -98,7 +98,7 @@ async function deleteSubmissionById(
     request: Request, 
     env: Env,
 ): Promise<Response> {
-    return deleteRecordById(
+    return httpDeleteRecordById<Submission>(
         request,
         env,
         {

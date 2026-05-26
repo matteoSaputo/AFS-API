@@ -1,4 +1,4 @@
-import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../../db/crud"
+import { httpCreateRecord, httpDeleteRecordById, httpGetRecordById, httpListRecords, httpPatchRecordById } from "../../db/crud"
 import { crudRouter } from "../../db/routers"
 import { Merchant, Env } from "../../utils/types"
 
@@ -44,7 +44,7 @@ async function listMerchants(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return listRecords(
+    return httpListRecords<Merchant>(
         request,
         env,
         {
@@ -58,7 +58,7 @@ async function createMerchant(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return createRecord<Merchant>(
+    return httpCreateRecord<Merchant>(
         request,
         env,
         {
@@ -73,7 +73,7 @@ async function getMerchantById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return getRecordById(
+    return httpGetRecordById<Merchant>(
         request,
         env,
         {
@@ -87,7 +87,7 @@ async function patchMerchantById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return patchRecordById<Merchant>(
+    return httpPatchRecordById<Merchant>(
         request,
         env,
         {
@@ -103,7 +103,7 @@ async function deleteMerchantById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return deleteRecordById(
+    return httpDeleteRecordById<Merchant>(
         request, 
         env,
         {

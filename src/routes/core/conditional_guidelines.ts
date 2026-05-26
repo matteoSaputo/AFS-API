@@ -1,4 +1,4 @@
-import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../../db/crud"
+import { httpCreateRecord, httpDeleteRecordById, httpGetRecordById, httpListRecords, httpPatchRecordById } from "../../db/crud"
 import { crudRouter } from "../../db/routers"
 import { ConditionalGuideline, Env } from "../../utils/types"
 
@@ -44,7 +44,7 @@ async function listConditionalGuidelines(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return listRecords(
+    return httpListRecords<ConditionalGuideline>(
         request,
         env,
         {
@@ -58,7 +58,7 @@ async function createConditionalGuideline(
     request: Request,
     env: Env,
 ): Promise<Response> {
-    return createRecord<ConditionalGuideline>(
+    return httpCreateRecord<ConditionalGuideline>(
         request,
         env,
         {
@@ -73,7 +73,7 @@ async function getConditionalGuidelineById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return getRecordById(
+    return httpGetRecordById<ConditionalGuideline>(
         request,
         env,
         {
@@ -87,7 +87,7 @@ async function patchConditionalGuidelineById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return patchRecordById<ConditionalGuideline>(
+    return httpPatchRecordById<ConditionalGuideline>(
         request,
         env,
         {
@@ -102,7 +102,7 @@ async function deleteConditionalGuidelineById(
     request: Request, 
     env: Env,
 ): Promise<Response> {
-    return deleteRecordById(
+    return httpDeleteRecordById<ConditionalGuideline>(
         request,
         env,
         {

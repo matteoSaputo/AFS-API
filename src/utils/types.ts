@@ -23,6 +23,8 @@ export type ResponseMethod = (request: Request, env: Env) => Promise<Response>
 export type ListOptions = {
   table: string;
   orderBy?: string;
+  limit?: number | string;
+  offset?: number | string;
 }
 
 export type GetByIdOptions = {
@@ -94,8 +96,14 @@ export interface DocusignTabs {
   listTabs?: any[];
 }
 
-// ================ Request/Response Bodies ==================
-export type Business = {
+// ================ DB Core Schema Objects ==================
+export type DatabaseRecord = {
+  id?: number;
+  created_at?: string;
+  updated_at?: string
+}
+
+export type Business = DatabaseRecord & {
   business_legal_name?: string | null;
   dba?: string | null;
   ein?: string | null;
@@ -114,12 +122,12 @@ export type Business = {
   airtable_id?: string | null;
 };
 
-export type Industry = {
+export type Industry = DatabaseRecord & {
   industry?: string | null;
   airtable_id?: string | null;
 };
 
-export type Merchant = {
+export type Merchant = DatabaseRecord & {
   name?: string | null;
   ssn?: string | null;
   date_of_birth?: string | null;
@@ -133,14 +141,14 @@ export type Merchant = {
   bad_history?: string | null;
 };
 
-export type Office = {
+export type Office = DatabaseRecord & {
   location?: string | null;
   status?: string | null;
   airtable_id?: string | null;
   manager_id?: number | null
 }
 
-export type Employee = {
+export type Employee = DatabaseRecord & {
   name?: string | null;
   email?: string | null;
   phone?: string | null;
@@ -151,7 +159,7 @@ export type Employee = {
   office_id?: number | null;
 }
 
-export type DataSource = {
+export type DataSource = DatabaseRecord & {
   data_source?: string | null;
   provider?: string | null;
   date_uploaded?: string | null;
@@ -159,7 +167,7 @@ export type DataSource = {
   airtable_id?: string | null;
 }
 
-export type Lender = {
+export type Lender = DatabaseRecord & {
   lender?: string | null;
   product?: string | null;
   min_revenue?: number | null;
@@ -171,7 +179,7 @@ export type Lender = {
   airtable_id?: string | null;
 }
 
-export type ConditionalGuideline = {
+export type ConditionalGuideline = DatabaseRecord & {
   guideline?: string | null;
   conditional_state?: string | null;
   conditional_entity_type?: string | null;
@@ -185,7 +193,7 @@ export type ConditionalGuideline = {
   airtable_id?: string | null;
 }
 
-export type Package = {
+export type Package = DatabaseRecord & {
   status?: string | null;
   date_received?: string | null;
   centrex_id?: string | null;
@@ -198,7 +206,7 @@ export type Package = {
   co_owner_ownership_percent?: number | null;
 }
 
-export type Deal = {
+export type Deal = DatabaseRecord & {
   date_processed?: string | null;
   stage?: string | null;
   status?: string | null;
@@ -207,7 +215,7 @@ export type Deal = {
   data_source_id?: number | null;
 }
 
-export type Submission = {
+export type Submission = DatabaseRecord & {
   date_submitted?: string | null;
   result?: string | null;
   feedback?: string | null;
@@ -216,7 +224,7 @@ export type Submission = {
   lender_id?: number | null;
 }
 
-export type Offer = {
+export type Offer = DatabaseRecord & {
   amount?: number | null;
   payment_cycles?: number | null;
   payment_frequency?: string | null;
@@ -226,7 +234,7 @@ export type Offer = {
   submission_id?: number | null;
 }
 
-export type Contract = {
+export type Contract = DatabaseRecord & {
   type?: string | null;
   funding_amount?: number | null;
   loc_amount?: number | null;
@@ -237,7 +245,7 @@ export type Contract = {
   offer_id?: number | null;
 }
 
-export type Funding = {
+export type Funding = DatabaseRecord & {
   date_funded?: string | null;
   points?: number | null;
   commission_status?: string | null;
@@ -246,7 +254,7 @@ export type Funding = {
   offer_id?: number | null;
 }
 
-export type Assignment = {
+export type Assignment = DatabaseRecord & {
   employee_id?: number | null;
   deal_id?: number | null;
   deal_role?: string | null;

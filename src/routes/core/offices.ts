@@ -1,4 +1,4 @@
-import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../../db/crud"
+import { httpCreateRecord, httpDeleteRecordById, httpGetRecordById, httpListRecords, httpPatchRecordById } from "../../db/crud"
 import { crudRouter } from "../../db/routers"
 import { Office, Env } from "../../utils/types"
 
@@ -37,7 +37,7 @@ async function listOffices(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return listRecords(
+    return httpListRecords<Office>(
         request,
         env,
         {
@@ -51,7 +51,7 @@ async function createOffice(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return createRecord<Office>(
+    return httpCreateRecord<Office>(
         request,
         env,
         {
@@ -66,7 +66,7 @@ async function getOfficeById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return getRecordById(
+    return httpGetRecordById<Office>(
         request,
         env,
         {
@@ -80,7 +80,7 @@ async function patchOfficeById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return patchRecordById<Office>(
+    return httpPatchRecordById<Office>(
         request,
         env,
         {
@@ -95,7 +95,7 @@ async function deleteOfficeById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return deleteRecordById(
+    return httpDeleteRecordById<Office>(
         request, 
         env,
         {

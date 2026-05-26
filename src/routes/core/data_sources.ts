@@ -1,4 +1,4 @@
-import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../../db/crud"
+import { httpCreateRecord, httpDeleteRecordById, httpGetRecordById, httpListRecords, httpPatchRecordById } from "../../db/crud"
 import { crudRouter } from "../../db/routers"
 import { DataSource, Env } from "../../utils/types"
 
@@ -38,7 +38,7 @@ async function listDataSources(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return listRecords(
+    return httpListRecords<DataSource>(
         request,
         env,
         {
@@ -52,7 +52,7 @@ async function createDataSource(
     request: Request,
     env: Env,
 ): Promise<Response> {
-    return createRecord<DataSource>(
+    return httpCreateRecord<DataSource>(
         request,
         env,
         {
@@ -63,11 +63,11 @@ async function createDataSource(
     );
 }
 
-async function getDataSourceById(
+async function getDataSourceById<DataSource>(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return getRecordById(
+    return httpGetRecordById(
         request,
         env,
         {
@@ -81,7 +81,7 @@ async function patchDataSourceById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return patchRecordById<DataSource>(
+    return httpPatchRecordById<DataSource>(
         request,
         env,
         {
@@ -96,7 +96,7 @@ async function deleteDataSourceById(
     request: Request, 
     env: Env,
 ): Promise<Response> {
-    return deleteRecordById(
+    return httpDeleteRecordById<DataSource>(
         request,
         env,
         {
