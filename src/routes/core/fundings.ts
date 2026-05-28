@@ -1,19 +1,12 @@
 import { httpCreateRecord, httpDeleteRecordById, httpGetRecordById, httpListRecords, httpPatchRecordById } from "../../db/crud"
 import { crudRouter } from "../../db/routers"
+import { fundingSchema } from "../../db/schema"
 import { Funding, Env } from "../../utils/types"
 
-const tableName = "fundings"
-const allowedFields: (keyof Funding)[] = [
-    "date_funded",
-    "points",
-    "commission_status",
-    "date_lender_paid",
-    "offer_id",
-    "airtable_id"
-]
-const requiredFields: (keyof Funding)[] = [
-    "offer_id"
-]
+const schema = fundingSchema
+const tableName = schema.table
+const allowedFields = schema.allowed;
+const requiredFields = schema.required;
 
 export async function fundingRouter(
     request: Request,

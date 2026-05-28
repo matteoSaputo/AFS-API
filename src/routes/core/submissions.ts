@@ -1,20 +1,12 @@
 import { httpCreateRecord, httpDeleteRecordById, httpGetRecordById, httpListRecords, httpPatchRecordById } from "../../db/crud"
 import { crudRouter } from "../../db/routers"
+import { submissionSchema } from "../../db/schema"
 import { Submission, Env } from "../../utils/types"
 
-const tableName = "submissions"
-const allowedFields: (keyof Submission)[] = [
-    "date_submitted",
-    "result",
-    "feedback", 
-    "airtable_id",
-    "deal_id",
-    "lender_id"
-]
-const requiredFields: (keyof Submission)[] = [
-    "deal_id",
-    "lender_id"
-]
+const schema = submissionSchema
+const tableName = schema.table
+const allowedFields = schema.allowed;
+const requiredFields = schema.required;
 
 export async function submissionRouter(
     request: Request,
@@ -95,7 +87,7 @@ async function patchSubmissionById(
 }
 
 async function deleteSubmissionById(
-    request: Request, 
+    request: Request,
     env: Env,
 ): Promise<Response> {
     return httpDeleteRecordById<Submission>(

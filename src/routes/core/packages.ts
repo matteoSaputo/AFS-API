@@ -1,23 +1,12 @@
 import { httpCreateRecord, httpDeleteRecordById, httpGetRecordById, httpListRecords, httpPatchRecordById } from "../../db/crud"
 import { crudRouter } from "../../db/routers"
+import { packageSchema } from "../../db/schema"
 import { Package, Env } from "../../utils/types"
 
-const tableName = "packages"
-const allowedFields: (keyof Package)[] = [
-    "status",
-    "date_received",
-    "centrex_id",
-    "drive_folder_id", 
-    "airtable_id",
-    "business_id",
-    "owner_id",
-    "co_owner_id",
-    "owner_ownership_percent",
-    "co_owner_ownership_percent"
-]
-const requiredFields: (keyof Package)[] = [
-    "business_id"
-]
+const schema = packageSchema
+const tableName = schema.table
+const allowedFields = schema.allowed;
+const requiredFields = schema.required;
 
 export async function packageRouter(
     request: Request,

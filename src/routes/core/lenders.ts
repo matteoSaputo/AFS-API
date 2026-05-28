@@ -1,23 +1,12 @@
 import { httpCreateRecord, httpDeleteRecordById, httpGetRecordById, httpListRecords, httpPatchRecordById } from "../../db/crud"
 import { crudRouter } from "../../db/routers"
+import { lenderSchema } from "../../db/schema"
 import { Lender, Env } from "../../utils/types"
 
-const tableName = "lenders"
-const allowedFields: (keyof Lender)[] = [
-    "lender",
-    "product",
-    "min_revenue",
-    "min_tib_months",
-    "min_positions",
-    "max_positions",
-    "min_credit_score",
-    "status", 
-    "airtable_id"
-]
-const requiredFields: (keyof Lender)[] = [
-    "lender",
-    "product",
-]
+const schema = lenderSchema
+const tableName = schema.table
+const allowedFields = schema.allowed;
+const requiredFields = schema.required;
 
 export async function lenderRouter(
     request: Request,
@@ -98,7 +87,7 @@ async function patchLenderById(
 }
 
 async function deleteLenderById(
-    request: Request, 
+    request: Request,
     env: Env,
 ): Promise<Response> {
     return httpDeleteRecordById<Lender>(

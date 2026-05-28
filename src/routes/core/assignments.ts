@@ -1,17 +1,12 @@
 import { httpCreateRecord, httpDeleteRecordById, httpGetRecordById, httpListRecords, httpPatchRecordById } from "../../db/crud"
 import { crudRouter } from "../../db/routers"
+import { assignmentSchema } from "../../db/schema"
 import { Assignment, Env } from "../../utils/types"
 
-const tableName = "assignments"
-const allowedFields: (keyof Assignment)[] = [
-    "employee_id", 
-    "deal_id",
-    "deal_role"
-]
-const requiredFields: (keyof Assignment)[] = [
-    "deal_id",
-    "deal_role"
-]
+const schema = assignmentSchema
+const tableName = schema.table;
+const allowedFields = schema.allowed;
+const requiredFields = schema.required;
 
 export async function assignmentRouter(
     request: Request,

@@ -1,18 +1,12 @@
 import { httpCreateRecord, httpDeleteRecordById, httpGetRecordById, httpListRecords, httpPatchRecordById } from "../../db/crud"
 import { crudRouter } from "../../db/routers"
+import { dataSourceSchema } from "../../db/schema"
 import { DataSource, Env } from "../../utils/types"
 
-const tableName = "data_sources"
-const allowedFields: (keyof DataSource)[] = [
-    "data_source",
-    "provider",
-    "date_uploaded",
-    "number_of_leads",
-    "airtable_id"
-]
-const requiredFields: (keyof DataSource)[] = [
-    "data_source"
-]
+const schema = dataSourceSchema
+const tableName = schema.table
+const allowedFields = schema.allowed;
+const requiredFields = schema.required;
 
 export async function dataSourceRouter(
     request: Request,

@@ -1,19 +1,12 @@
 import { httpCreateRecord, httpDeleteRecordById, httpGetRecordById, httpListRecords, httpPatchRecordById } from "../../db/crud"
 import { crudRouter } from "../../db/routers"
+import { dealSchema } from "../../db/schema"
 import { Deal, Env } from "../../utils/types"
 
-const tableName = "deals"
-const allowedFields: (keyof Deal)[] = [
-    "date_processed", 
-    "stage",
-    "status",
-    "airtable_id",
-    "package_id",
-    "data_source_id"
-]
-const requiredFields: (keyof Deal)[] = [
-    "package_id"
-]
+const schema = dealSchema
+const tableName = schema.table
+const allowedFields = schema.allowed;
+const requiredFields = schema.required;
 
 export async function dealRouter(
     request: Request,

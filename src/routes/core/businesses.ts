@@ -1,30 +1,12 @@
 import { httpCreateRecord, httpDeleteRecordById, httpGetRecordById, httpListRecords, httpPatchRecordById } from "../../db/crud"
 import { crudRouter } from "../../db/routers"
+import { businessSchema } from "../../db/schema"
 import { Business, Env } from "../../utils/types"
 
-const tableName = "businesses"
-const allowedFields: (keyof Business)[] = [
-    "business_legal_name",
-    "ein",
-    "industry_id",
-    "dba",
-    "entity_type",
-    "address", 
-    "city", 
-    "state", 
-    "zip",
-    "email",
-    "phone",
-    "average_monthly_revenue",
-    "start_date",
-    "number_of_positions",
-    "description",
-    "airtable_id"
-]
-const requiredFields: (keyof Business)[] = [
-    "business_legal_name",
-    "ein",
-]
+const schema = businessSchema
+const tableName = schema.table
+const allowedFields = schema.allowed;
+const requiredFields = schema.required;
 
 export async function businessRouter(
     request: Request,

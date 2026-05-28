@@ -1,15 +1,12 @@
 import { httpCreateRecord, httpDeleteRecordById, httpGetRecordById, httpListRecords, httpPatchRecordById } from "../../db/crud"
 import { crudRouter } from "../../db/routers"
+import { industrySchema } from "../../db/schema"
 import { Industry, Env } from "../../utils/types"
 
-const tableName = "industries"
-const allowedFields: (keyof Industry)[] = [
-    "industry", 
-    "airtable_id"
-]
-const requiredFields: (keyof Industry)[] = [
-    "industry"
-]
+const schema = industrySchema
+const tableName = schema.table
+const allowedFields = schema.allowed;
+const requiredFields = schema.required;
 
 export async function industryRouter(
     request: Request,
@@ -90,7 +87,7 @@ async function patchIndustryById(
 }
 
 async function deleteIndustryById(
-    request: Request, 
+    request: Request,
     env: Env,
 ): Promise<Response> {
     return httpDeleteRecordById<Industry>(

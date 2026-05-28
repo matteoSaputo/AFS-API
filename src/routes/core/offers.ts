@@ -1,20 +1,12 @@
 import { httpCreateRecord, httpDeleteRecordById, httpGetRecordById, httpListRecords, httpPatchRecordById } from "../../db/crud"
 import { crudRouter } from "../../db/routers"
+import { offerSchema } from "../../db/schema"
 import { Offer, Env } from "../../utils/types"
 
-const tableName = "offers"
-const allowedFields: (keyof Offer)[] = [
-    "amount",
-    "payment_cycles",
-    "payment_frequency",
-    "buy_rate",
-    "sell_rate",
-    "submission_id", 
-    "airtable_id"
-]
-const requiredFields: (keyof Offer)[] = [
-    "submission_id"
-]
+const schema = offerSchema
+const tableName = schema.table
+const allowedFields = schema.allowed;
+const requiredFields = schema.required;
 
 export async function offerRouter(
     request: Request,

@@ -1,24 +1,12 @@
 import { httpCreateRecord, httpDeleteRecordById, httpGetRecordById, httpListRecords, httpPatchRecordById } from "../../db/crud"
 import { crudRouter } from "../../db/routers"
+import { conditionalGuidelineSchema } from "../../db/schema"
 import { ConditionalGuideline, Env } from "../../utils/types"
 
-const tableName = "conditional_guidelines"
-const allowedFields: (keyof ConditionalGuideline)[] = [
-    "guideline",
-    "conditional_state",
-    "conditional_entity_type",
-    "conditional_revenue",
-    "conditional_tib_months",
-    "conditional_min_positions",
-    "conditional_max_positions",
-    "conditional_credit_score",
-    "industry_id",
-    "lender_id", 
-    "airtable_id"
-]
-const requiredFields: (keyof ConditionalGuideline)[] = [
-    "guideline"
-]
+const schema = conditionalGuidelineSchema
+const tableName = schema.table
+const allowedFields = schema.allowed;
+const requiredFields = schema.required;
 
 export async function conditionalGuidelinesRouter(
     request: Request,
