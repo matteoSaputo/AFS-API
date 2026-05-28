@@ -1,21 +1,12 @@
-import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../../db/crud"
+import { httpCreateRecord, httpDeleteRecordById, httpGetRecordById, httpListRecords, httpPatchRecordById } from "../../db/crud"
 import { crudRouter } from "../../db/routers"
+import { employeeSchema } from "../../db/schema"
 import { Employee, Env } from "../../utils/types"
 
-const tableName = "employees"
-const allowedFields: (keyof Employee)[] = [
-    "name",
-    "email",
-    "phone",
-    "employment_status",
-    "commission_split_percent",
-    "role",
-    "airtable_id",
-    "office_id"
-]
-const requiredFields: (keyof Employee)[] = [
-    "name"
-]
+const schema = employeeSchema
+const tableName = schema.table
+const allowedFields = schema.allowed;
+const requiredFields = schema.required;
 
 export async function employeeRouter(
     request: Request,
@@ -41,7 +32,7 @@ async function listEmployees(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return listRecords(
+    return httpListRecords<Employee>(
         request,
         env,
         {
@@ -55,7 +46,7 @@ async function createEmployee(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return createRecord<Employee>(
+    return httpCreateRecord<Employee>(
         request, 
         env,
         {
@@ -70,7 +61,7 @@ async function getEmployeeById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return getRecordById(
+    return httpGetRecordById<Employee>(
         request,
         env,
         {
@@ -84,7 +75,7 @@ async function patchEmployeeById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return patchRecordById<Employee>(
+    return httpPatchRecordById<Employee>(
         request,
         env,
         {
@@ -99,7 +90,7 @@ async function deleteEmployeeById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return deleteRecordById(
+    return httpDeleteRecordById<Employee>(
         request,
         env,
         {

@@ -1,23 +1,12 @@
-import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../../db/crud"
+import { httpCreateRecord, httpDeleteRecordById, httpGetRecordById, httpListRecords, httpPatchRecordById } from "../../db/crud"
 import { crudRouter } from "../../db/routers"
+import { packageSchema } from "../../db/schema"
 import { Package, Env } from "../../utils/types"
 
-const tableName = "packages"
-const allowedFields: (keyof Package)[] = [
-    "status",
-    "date_received",
-    "centrex_id",
-    "drive_folder_id", 
-    "airtable_id",
-    "business_id",
-    "owner_id",
-    "co_owner_id",
-    "owner_ownership_percent",
-    "co_owner_ownership_percent"
-]
-const requiredFields: (keyof Package)[] = [
-    "business_id"
-]
+const schema = packageSchema
+const tableName = schema.table
+const allowedFields = schema.allowed;
+const requiredFields = schema.required;
 
 export async function packageRouter(
     request: Request,
@@ -43,7 +32,7 @@ async function listPackages(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return listRecords(
+    return httpListRecords<Package>(
         request,
         env,
         {
@@ -57,7 +46,7 @@ async function createPackage(
     request: Request,
     env: Env,
 ): Promise<Response> {
-    return createRecord<Package>(
+    return httpCreateRecord<Package>(
         request,
         env,
         {
@@ -72,7 +61,7 @@ async function getPackageById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return getRecordById(
+    return httpGetRecordById<Package>(
         request,
         env,
         {
@@ -86,7 +75,7 @@ async function patchPackageById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return patchRecordById<Package>(
+    return httpPatchRecordById<Package>(
         request,
         env,
         {
@@ -101,7 +90,7 @@ async function deletePackageById(
     request: Request, 
     env: Env,
 ): Promise<Response> {
-    return deleteRecordById(
+    return httpDeleteRecordById<Package>(
         request,
         env,
         {

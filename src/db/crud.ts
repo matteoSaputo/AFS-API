@@ -1,8 +1,9 @@
 import { ok, fail } from "../utils/response";
 import { CreateOptions, DeleteOptions, Env, GetByIdOptions, ListOptions, PatchOptions } from "../utils/types";
 import { makeClient } from "./client";
+import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "./records";
 
-export async function listRecords(
+export async function httpListRecords<T extends Record<string, any>>(
     request: Request,
     env: Env,
     options: ListOptions
@@ -10,25 +11,20 @@ export async function listRecords(
     const url = new URL(request.url)
     const client = makeClient(env);
 
-    const limit = Number(url.searchParams.get("limit") ?? "25");
-    const offset = Number(url.searchParams.get("offset") ?? "0");
+    const limit = options.limit ?? Number(url.searchParams.get("limit") ?? "25");
+    const offset = options.offset ?? Number(url.searchParams.get("offset") ?? "0");
 
     try {
         await client.connect();
 
-        const result = await client.query(
-            `
-                select *
-                from ${options.table}
-                order by ${options.orderBy ?? "id desc"}
-                limit $1
-                offset $2
-            `,
-            [limit, offset]
-        );
+        const result = await listRecords<T>(client, {
+            ...options,
+            limit,
+            offset
+        })
 
         return ok(result.rows, {
-            count: result.rowCount,
+            count: result.count,
         });
     } catch (err: any) {
         return fail(err?.message ?? String(err), 500);
@@ -37,7 +33,7 @@ export async function listRecords(
     }
 }
 
-export async function getRecordById(
+export async function httpGetRecordById<T extends Record<string, any>>(
     request: Request,
     env: Env,
     options: GetByIdOptions
@@ -55,20 +51,16 @@ export async function getRecordById(
     try {
         await client.connect();
 
-        const result = await client.query(
-            `
-                select *
-                from ${options.table}
-                where id = $1        
-            `,
-            [id]
-        );
+        const result = await getRecordById<T>(client, {
+            ...options,
+            id
+        })
 
-        if(result.rowCount === 0){
+        if(result.count === 0){
             return fail(options.notFoundMessage ?? "Not Found", 404);
         }
 
-        return ok(result.rows[0])
+        return ok(result.row)
     } catch (err: any) {
         return fail(err?.message ?? String(err), 500)
     } finally {
@@ -76,7 +68,7 @@ export async function getRecordById(
     }
 }
 
-export async function createRecord<T extends Record<string, any>>(
+export async function httpCreateRecord<T extends Record<string, any>>(
     request: Request,
     env: Env,
     options: CreateOptions<T>,
@@ -92,57 +84,17 @@ export async function createRecord<T extends Record<string, any>>(
         }    
     }
     
-    const validationError = options.validator?.(body);
-    if(validationError){
-        return fail(validationError, 400)
-    }
-
-    if(options.requiredFields){
-        for(const field of options.requiredFields){
-            if([undefined, null, ""].includes(body[field])){
-                return fail(`${String(field)} is required`, 400)
-            }
-        }
-    }
-
-    const entries = Object.entries(body).filter(
-        ([key, value]) => 
-            options.allowedFields.includes(key as keyof T) && value !== undefined
-    )
-
-    if(entries.length === 0){
-        return fail("No valid fields provided", 400);
-    }
-
-    const columns = entries.map(
-        ([key]) => key
-    );
-    const placeholders = entries.map(
-        (_, index) => `$${index + 1}`
-    );
-    const values = entries.map(
-        ([, value]) => value
-    );
-
     const client = makeClient(env);
 
     try {
         await client.connect();
 
-        const result = await client.query(
-            `
-                insert into ${options.table} (
-                    ${columns.join(", ")}
-                ) 
-                values (
-                    ${placeholders.join(", ")}
-                )
-                    returning *
-            `,
-            values
-        );
+        const row = await createRecord<T>(client, {
+            ...options,
+            body
+        });
 
-        return ok(result.rows[0])
+        return ok(row);
     } catch (err: any) {
         return fail(err?.message ?? String(err), 500)
     } finally {
@@ -150,7 +102,7 @@ export async function createRecord<T extends Record<string, any>>(
     }
 }
 
-export async function patchRecordById<T extends Record<string, any>>(
+export async function httpPatchRecordById<T extends Record<string, any>>(
     request: Request,
     env: Env,
     options: PatchOptions<T>,
@@ -173,46 +125,23 @@ export async function patchRecordById<T extends Record<string, any>>(
             return fail("Invalid JSON body", 400)
         }    
     }
-    
-    const validationError = options.validator?.(body);
-    if(validationError){
-        return fail(validationError, 400)
-    }
-
-    const entries = Object.entries(body).filter(
-        ([key, value]) => 
-            options.allowedFields.includes(key as keyof T) && value !== undefined
-    )
-
-    if(entries.length === 0){
-        return fail("No valid fields provided for update", 400);
-    }
-
-    const setClauses = entries.map(
-        ([key], index) => `${key} = $${index + 1}`
-    )
-    const values = entries.map(([, value]) => value);
 
     const client = makeClient(env);
 
     try {
         await client.connect();
 
-        const result = await client.query(
-            `
-                update ${options.table}
-                set ${setClauses.join(", ")}
-                where id = $${values.length + 1}
-                returning *
-            `,
-            [...values, id]
-        );
+        const result = await patchRecordById<T>(client, {
+            ...options,
+            body,
+            id
+        });
 
-        if(result.rowCount === 0){
+        if(result.count === 0){
             return fail(options.notFoundMessage ?? "Not Found", 404)
         }
 
-        return ok(result.rows[0])
+        return ok(result.row);
     } catch (err: any) {
         return fail(err?.message ?? String(err), 500);
     } finally {
@@ -220,7 +149,7 @@ export async function patchRecordById<T extends Record<string, any>>(
     }
 }
 
-export async function deleteRecordById(
+export async function httpDeleteRecordById<T extends Record<string, any>>(
     request: Request,
     env: Env,
     options: DeleteOptions
@@ -238,20 +167,16 @@ export async function deleteRecordById(
     try {
         await client.connect();
 
-        const result = await client.query(
-            `
-                delete from ${options.table}
-                where id = $1
-                returning *  
-            `,
-            [id]
-        );
+        const result = await deleteRecordById<T>(client, {
+            ...options,
+            id
+        })
 
-        if(result.rowCount === 0){
+        if(result.count === 0){
             return fail(options.notFoundMessage ?? "Not Found", 404);
         }
 
-        return ok(result.rows[0]);
+        return ok(result.row);
     } catch (err: any) {
         return fail(err?.message ?? String(err), 500);
     } finally {

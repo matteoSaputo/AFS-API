@@ -1,20 +1,12 @@
-import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../../db/crud"
+import { httpCreateRecord, httpDeleteRecordById, httpGetRecordById, httpListRecords, httpPatchRecordById } from "../../db/crud"
 import { crudRouter } from "../../db/routers"
+import { offerSchema } from "../../db/schema"
 import { Offer, Env } from "../../utils/types"
 
-const tableName = "offers"
-const allowedFields: (keyof Offer)[] = [
-    "amount",
-    "payment_cycles",
-    "payment_frequency",
-    "buy_rate",
-    "sell_rate",
-    "submission_id", 
-    "airtable_id"
-]
-const requiredFields: (keyof Offer)[] = [
-    "submission_id"
-]
+const schema = offerSchema
+const tableName = schema.table
+const allowedFields = schema.allowed;
+const requiredFields = schema.required;
 
 export async function offerRouter(
     request: Request,
@@ -40,7 +32,7 @@ async function listOffers(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return listRecords(
+    return httpListRecords<Offer>(
         request,
         env,
         {
@@ -54,7 +46,7 @@ async function createOffer(
     request: Request,
     env: Env,
 ): Promise<Response> {
-    return createRecord<Offer>(
+    return httpCreateRecord<Offer>(
         request,
         env,
         {
@@ -69,7 +61,7 @@ async function getOfferById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return getRecordById(
+    return httpGetRecordById<Offer>(
         request,
         env,
         {
@@ -83,7 +75,7 @@ async function patchOfferById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return patchRecordById<Offer>(
+    return httpPatchRecordById<Offer>(
         request,
         env,
         {
@@ -98,7 +90,7 @@ async function deleteOfferById(
     request: Request, 
     env: Env,
 ): Promise<Response> {
-    return deleteRecordById(
+    return httpDeleteRecordById<Offer>(
         request,
         env,
         {

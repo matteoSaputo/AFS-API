@@ -1,24 +1,12 @@
-import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../../db/crud"
+import { httpCreateRecord, httpDeleteRecordById, httpGetRecordById, httpListRecords, httpPatchRecordById } from "../../db/crud"
 import { crudRouter } from "../../db/routers"
+import { conditionalGuidelineSchema } from "../../db/schema"
 import { ConditionalGuideline, Env } from "../../utils/types"
 
-const tableName = "conditional_guidelines"
-const allowedFields: (keyof ConditionalGuideline)[] = [
-    "guideline",
-    "conditional_state",
-    "conditional_entity_type",
-    "conditional_revenue",
-    "conditional_tib_months",
-    "conditional_min_positions",
-    "conditional_max_positions",
-    "conditional_credit_score",
-    "industry_id",
-    "lender_id", 
-    "airtable_id"
-]
-const requiredFields: (keyof ConditionalGuideline)[] = [
-    "guideline"
-]
+const schema = conditionalGuidelineSchema
+const tableName = schema.table
+const allowedFields = schema.allowed;
+const requiredFields = schema.required;
 
 export async function conditionalGuidelinesRouter(
     request: Request,
@@ -44,7 +32,7 @@ async function listConditionalGuidelines(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return listRecords(
+    return httpListRecords<ConditionalGuideline>(
         request,
         env,
         {
@@ -58,7 +46,7 @@ async function createConditionalGuideline(
     request: Request,
     env: Env,
 ): Promise<Response> {
-    return createRecord<ConditionalGuideline>(
+    return httpCreateRecord<ConditionalGuideline>(
         request,
         env,
         {
@@ -73,7 +61,7 @@ async function getConditionalGuidelineById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return getRecordById(
+    return httpGetRecordById<ConditionalGuideline>(
         request,
         env,
         {
@@ -87,7 +75,7 @@ async function patchConditionalGuidelineById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return patchRecordById<ConditionalGuideline>(
+    return httpPatchRecordById<ConditionalGuideline>(
         request,
         env,
         {
@@ -102,7 +90,7 @@ async function deleteConditionalGuidelineById(
     request: Request, 
     env: Env,
 ): Promise<Response> {
-    return deleteRecordById(
+    return httpDeleteRecordById<ConditionalGuideline>(
         request,
         env,
         {

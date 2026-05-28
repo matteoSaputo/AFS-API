@@ -1,24 +1,12 @@
-import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../../db/crud"
+import { httpCreateRecord, httpDeleteRecordById, httpGetRecordById, httpListRecords, httpPatchRecordById } from "../../db/crud"
 import { crudRouter } from "../../db/routers"
+import { merchantSchema } from "../../db/schema"
 import { Merchant, Env } from "../../utils/types"
 
-const tableName = "merchants";
-const allowedFields: (keyof Merchant)[] = [
-    "name",
-    "ssn",
-    "date_of_birth",
-    "address",
-    "city",
-    "state",
-    "zip",
-    "email",
-    "phone",
-    "credit_score",
-    "bad_history",
-];
-const requiredFields: (keyof Merchant)[] = [
-    "name",
-];
+const schema = merchantSchema
+const tableName = schema.table
+const allowedFields = schema.allowed;
+const requiredFields = schema.required;
 
 export async function merchantRouter(
     request: Request,
@@ -44,7 +32,7 @@ async function listMerchants(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return listRecords(
+    return httpListRecords<Merchant>(
         request,
         env,
         {
@@ -58,7 +46,7 @@ async function createMerchant(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return createRecord<Merchant>(
+    return httpCreateRecord<Merchant>(
         request,
         env,
         {
@@ -73,7 +61,7 @@ async function getMerchantById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return getRecordById(
+    return httpGetRecordById<Merchant>(
         request,
         env,
         {
@@ -87,7 +75,7 @@ async function patchMerchantById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return patchRecordById<Merchant>(
+    return httpPatchRecordById<Merchant>(
         request,
         env,
         {
@@ -103,7 +91,7 @@ async function deleteMerchantById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return deleteRecordById(
+    return httpDeleteRecordById<Merchant>(
         request, 
         env,
         {

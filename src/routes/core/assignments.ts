@@ -1,17 +1,12 @@
-import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../../db/crud"
+import { httpCreateRecord, httpDeleteRecordById, httpGetRecordById, httpListRecords, httpPatchRecordById } from "../../db/crud"
 import { crudRouter } from "../../db/routers"
+import { assignmentSchema } from "../../db/schema"
 import { Assignment, Env } from "../../utils/types"
 
-const tableName = "assignments"
-const allowedFields: (keyof Assignment)[] = [
-    "employee_id", 
-    "deal_id",
-    "deal_role"
-]
-const requiredFields: (keyof Assignment)[] = [
-    "deal_id",
-    "deal_role"
-]
+const schema = assignmentSchema
+const tableName = schema.table;
+const allowedFields = schema.allowed;
+const requiredFields = schema.required;
 
 export async function assignmentRouter(
     request: Request,
@@ -37,7 +32,7 @@ async function listAssignments(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return listRecords(
+    return httpListRecords<Assignment>(
         request,
         env,
         {
@@ -51,7 +46,7 @@ async function createAssignment(
     request: Request,
     env: Env,
 ): Promise<Response> {
-    return createRecord<Assignment>(
+    return httpCreateRecord<Assignment>(
         request,
         env,
         {
@@ -66,7 +61,7 @@ async function getAssignmentById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return getRecordById(
+    return httpGetRecordById<Assignment>(
         request,
         env,
         {
@@ -80,7 +75,7 @@ async function patchAssignmentById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return patchRecordById<Assignment>(
+    return httpPatchRecordById<Assignment>(
         request,
         env,
         {
@@ -95,7 +90,7 @@ async function deleteAssignmentById(
     request: Request, 
     env: Env,
 ): Promise<Response> {
-    return deleteRecordById(
+    return httpDeleteRecordById<Assignment>(
         request,
         env,
         {

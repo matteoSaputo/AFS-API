@@ -1,30 +1,12 @@
-import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../../db/crud"
+import { httpCreateRecord, httpDeleteRecordById, httpGetRecordById, httpListRecords, httpPatchRecordById } from "../../db/crud"
 import { crudRouter } from "../../db/routers"
+import { businessSchema } from "../../db/schema"
 import { Business, Env } from "../../utils/types"
 
-const tableName = "businesses"
-const allowedFields: (keyof Business)[] = [
-    "business_legal_name",
-    "ein",
-    "industry_id",
-    "dba",
-    "entity_type",
-    "address", 
-    "city", 
-    "state", 
-    "zip",
-    "email",
-    "phone",
-    "average_monthly_revenue",
-    "start_date",
-    "number_of_positions",
-    "description",
-    "airtable_id"
-]
-const requiredFields: (keyof Business)[] = [
-    "business_legal_name",
-    "ein",
-]
+const schema = businessSchema
+const tableName = schema.table
+const allowedFields = schema.allowed;
+const requiredFields = schema.required;
 
 export async function businessRouter(
     request: Request,
@@ -50,7 +32,7 @@ async function listBusinesses(
     request: Request, 
     env: Env
 ): Promise<Response> {
-    return listRecords(
+    return httpListRecords<Business>(
         request,
         env,
         {
@@ -64,7 +46,7 @@ async function createBusiness(
     request: Request, 
     env: Env
 ): Promise<Response> {
-    return createRecord<Business>(
+    return httpCreateRecord<Business>(
         request,
         env,
         {
@@ -79,7 +61,7 @@ async function getBusinessById(
     request: Request, 
     env: Env
 ): Promise<Response> {
-    return getRecordById(
+    return httpGetRecordById<Business>(
         request,
         env,
         {
@@ -93,7 +75,7 @@ async function patchBusinessById(
     request: Request, 
     env: Env
 ): Promise<Response> {
-    return patchRecordById<Business>(
+    return httpPatchRecordById<Business>(
         request,
         env,
         {
@@ -108,7 +90,7 @@ async function deleteBusinessById(
     request: Request, 
     env: Env
 ): Promise<Response> {
-    return deleteRecordById(
+    return httpDeleteRecordById<Business>(
         request,
         env,
         {

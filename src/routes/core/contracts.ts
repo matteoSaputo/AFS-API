@@ -1,21 +1,12 @@
-import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../../db/crud"
+import { httpCreateRecord, httpDeleteRecordById, httpGetRecordById, httpListRecords, httpPatchRecordById } from "../../db/crud"
 import { crudRouter } from "../../db/routers"
+import { contractSchema } from "../../db/schema"
 import { Contract, Env } from "../../utils/types"
 
-const tableName = "contracts"
-const allowedFields: (keyof Contract)[] = [
-    "type",
-    "funding_amount",
-    "loc_amount",
-    "payment_frequency",
-    "fee_percent",
-    "interest_rate",
-    "offer_id", 
-    "airtable_id"
-]
-const requiredFields: (keyof Contract)[] = [
-    "offer_id"
-]
+const schema = contractSchema
+const tableName = schema.table
+const allowedFields = schema.allowed;
+const requiredFields = schema.required;
 
 export async function contractRouter(
     request: Request,
@@ -41,7 +32,7 @@ async function listContracts(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return listRecords(
+    return httpListRecords<Contract>(
         request,
         env,
         {
@@ -55,7 +46,7 @@ async function createContract(
     request: Request,
     env: Env,
 ): Promise<Response> {
-    return createRecord<Contract>(
+    return httpCreateRecord<Contract>(
         request,
         env,
         {
@@ -70,7 +61,7 @@ async function getContractById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return getRecordById(
+    return httpGetRecordById<Contract>(
         request,
         env,
         {
@@ -84,7 +75,7 @@ async function patchContractById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return patchRecordById<Contract>(
+    return httpPatchRecordById<Contract>(
         request,
         env,
         {
@@ -99,7 +90,7 @@ async function deleteContractById(
     request: Request, 
     env: Env,
 ): Promise<Response> {
-    return deleteRecordById(
+    return httpDeleteRecordById<Contract>(
         request,
         env,
         {

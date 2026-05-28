@@ -1,23 +1,12 @@
-import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../../db/crud"
+import { httpCreateRecord, httpDeleteRecordById, httpGetRecordById, httpListRecords, httpPatchRecordById } from "../../db/crud"
 import { crudRouter } from "../../db/routers"
+import { lenderSchema } from "../../db/schema"
 import { Lender, Env } from "../../utils/types"
 
-const tableName = "lenders"
-const allowedFields: (keyof Lender)[] = [
-    "lender",
-    "product",
-    "min_revenue",
-    "min_tib_months",
-    "min_positions",
-    "max_positions",
-    "min_credit_score",
-    "status", 
-    "airtable_id"
-]
-const requiredFields: (keyof Lender)[] = [
-    "lender",
-    "product",
-]
+const schema = lenderSchema
+const tableName = schema.table
+const allowedFields = schema.allowed;
+const requiredFields = schema.required;
 
 export async function lenderRouter(
     request: Request,
@@ -43,7 +32,7 @@ async function listLenders(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return listRecords(
+    return httpListRecords<Lender>(
         request,
         env,
         {
@@ -57,7 +46,7 @@ async function createLender(
     request: Request,
     env: Env,
 ): Promise<Response> {
-    return createRecord<Lender>(
+    return httpCreateRecord<Lender>(
         request,
         env,
         {
@@ -72,7 +61,7 @@ async function getLenderById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return getRecordById(
+    return httpGetRecordById<Lender>(
         request,
         env,
         {
@@ -86,7 +75,7 @@ async function patchLenderById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return patchRecordById<Lender>(
+    return httpPatchRecordById<Lender>(
         request,
         env,
         {
@@ -98,10 +87,10 @@ async function patchLenderById(
 }
 
 async function deleteLenderById(
-    request: Request, 
+    request: Request,
     env: Env,
 ): Promise<Response> {
-    return deleteRecordById(
+    return httpDeleteRecordById<Lender>(
         request,
         env,
         {

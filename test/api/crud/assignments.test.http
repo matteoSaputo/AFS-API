@@ -7,10 +7,10 @@ api-key: {{apiKey}}
     "deal_id": 2
 }
 ###
-GET {{baseUrl}}/assignments/3
+GET {{baseUrl}}/assignments/6
 api-key: {{apiKey}}
 ###
-PATCH {{baseUrl}}/assignments/3
+PATCH {{baseUrl}}/assignments/6
 Content-Type: application/json
 api-key: {{apiKey}}
 
@@ -21,5 +21,5 @@ api-key: {{apiKey}}
 GET {{baseUrl}}/assignments
 api-key: {{apiKey}}
 ###
-DELETE {{baseUrl}}/assignments/5
+DELETE {{baseUrl}}/assignments/7
 api-key: {{apiKey}}

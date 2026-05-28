@@ -1,17 +1,12 @@
-import { createRecord, deleteRecordById, getRecordById, listRecords, patchRecordById } from "../../db/crud"
+import { httpCreateRecord, httpDeleteRecordById, httpGetRecordById, httpListRecords, httpPatchRecordById } from "../../db/crud"
 import { crudRouter } from "../../db/routers"
+import { officeSchema } from "../../db/schema"
 import { Office, Env } from "../../utils/types"
 
-const tableName = "offices"
-const allowedFields: (keyof Office)[] = [
-    "location",
-    "status",
-    "airtable_id",
-    "manager_id"
-]
-const requiredFields: (keyof Office)[] = [
-    "location"
-]
+const schema = officeSchema
+const tableName = schema.table
+const allowedFields = schema.allowed;
+const requiredFields = schema.required;
 
 export async function officesRouter(
     request: Request,
@@ -37,7 +32,7 @@ async function listOffices(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return listRecords(
+    return httpListRecords<Office>(
         request,
         env,
         {
@@ -51,7 +46,7 @@ async function createOffice(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return createRecord<Office>(
+    return httpCreateRecord<Office>(
         request,
         env,
         {
@@ -66,7 +61,7 @@ async function getOfficeById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return getRecordById(
+    return httpGetRecordById<Office>(
         request,
         env,
         {
@@ -80,7 +75,7 @@ async function patchOfficeById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return patchRecordById<Office>(
+    return httpPatchRecordById<Office>(
         request,
         env,
         {
@@ -95,7 +90,7 @@ async function deleteOfficeById(
     request: Request,
     env: Env
 ): Promise<Response> {
-    return deleteRecordById(
+    return httpDeleteRecordById<Office>(
         request, 
         env,
         {
