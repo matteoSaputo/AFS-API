@@ -165,6 +165,7 @@ export const packageSchema = defineTableSchema({
         co_owner_id: "number",
         owner_ownership_percent: "number",
         co_owner_ownership_percent: "number",
+        docusign_envelope_id: "string",
     },
     required: ["business_id"],
 });

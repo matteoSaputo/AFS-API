@@ -2,6 +2,7 @@ import { webhookRouter } from "../../db/routers";
 import { docusignGetRecipients, docusignGetTabsForRecipient } from "../../integrations/docusign/client";
 import { mapDocusignApplication } from "../../integrations/docusign/mapper";
 import { tabsToRawObject } from "../../integrations/docusign/parser";
+import { createPackageFromDocusignApplication } from "../../integrations/docusign/services/completed_application";
 import { getDocusignToken } from "../../integrations/docusign/token";
 import { fail } from "../../utils/response";
 import { Env } from "../../utils/types";
@@ -76,9 +77,11 @@ async function handleCompletedDocusign(
             rawObjects.push(tabsToRawObject(tabs))
         }
 
-        const raw = Object.assign({}, ...rawObjects);
+        const raw = Object.assign({docusign_envelope_id: envelopeId}, ...rawObjects);
 
         const mapped = mapDocusignApplication(raw)
+
+        const created = await createPackageFromDocusignApplication(env, mapped);
 
         return Response.json({
             ok: true,
@@ -88,6 +91,7 @@ async function handleCompletedDocusign(
             fieldsFound: Object.keys(raw).length,
             raw,
             mapped,
+            created,
             receivedAt: new Date().toISOString()
         });
     } catch (err: any) {

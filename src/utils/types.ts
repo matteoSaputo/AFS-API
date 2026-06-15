@@ -96,6 +96,14 @@ export interface DocusignTabs {
   listTabs?: any[];
 }
 
+export type MappedDocusignApplication = {
+  industryName: string | null;
+  business: Business;
+  owner: Merchant;
+  coOwner: Merchant | null;
+  package: Package;
+};
+
 // ================ DB Core Schema Objects ==================
 import type {
   InferRecord,

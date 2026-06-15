@@ -43,10 +43,11 @@ export function mapDocusignApplication(raw: Record<string, string>) {
       : null,
 
     package: {
-      status: "Application Received",
+      status: "Sent",
       date_received: new Date().toISOString().slice(0, 10),
       owner_ownership_percent: parseNumber(raw["Owner Ownership Percent"]),
       co_owner_ownership_percent: parseNumber(raw["Co-Owner Ownership Percent"]),
+      docusign_envelope_id: cleanString(raw["docusign_envelope_id"])
     },
   };
 }
